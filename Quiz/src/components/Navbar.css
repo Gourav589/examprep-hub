@@ -26,3 +26,23 @@
 .nav-links a:hover {
   color: #4f46e5;
 }
+
+
+.user-name {
+  color: #4f46e5;
+  font-weight: 600;
+}
+
+.logout-btn {
+  padding: 6px 16px;
+  background: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.logout-btn:hover {
+  background: #dc2626;
+}

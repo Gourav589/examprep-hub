@@ -16,9 +16,14 @@ function Login() {
       const { data } = await API.post("/auth/login", { email, password });
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
-      navigate("/");
+
+      if (data.user && data.user.role === "admin") {
+        navigate("/admin");
+      } else {
+        navigate("/");
+      }
     } catch (err) {
-      setError(err.response?.data?.message || "Something went wrong");
+      setError(err.response?.data?.message || err.message);
     }
   };
 

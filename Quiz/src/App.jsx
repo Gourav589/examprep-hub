@@ -6,7 +6,11 @@ import Signup from "./pages/Signup";
 import ExamDetail from "./pages/ExamDetail";
 import TestPage from "./pages/TestPage";
 import Result from "./pages/Result";
-
+import AdminRoute from "./components/AdminRoute";
+import AdminDashboard from "./pages/AdminDashboard";
+import AdminExams from "./pages/AdminExams";
+import AdminQuestions from "./pages/AdminQuestions";
+import AdminStudents from "./pages/AdminStudents";
 function App() {
   return (
     <>
@@ -18,6 +22,10 @@ function App() {
         <Route path="/exams/:id" element={<ExamDetail />} />
         <Route path="/exams/:id/test" element={<TestPage />} />
         <Route path="/exams/:id/result" element={<Result />} />
+        <Route path="/admin"element={ <AdminRoute> <AdminDashboard /> </AdminRoute>}/>
+     <Route path="/admin/exams"element={<AdminRoute> <AdminExams /></AdminRoute> }/>
+      <Route path="/admin/questions"element={<AdminRoute> <AdminQuestions /></AdminRoute> }/>
+     <Route path="/admin/students"element={<AdminRoute> <AdminStudents /></AdminRoute>}/>
       </Routes>
     </>
   );

@@ -15,12 +15,12 @@ function TestPage() {
   const [timeLeft, setTimeLeft] = useState(TOTAL_SECONDS);
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    API.get(`/questions/exam/${id}`)
-      .then((res) => setQuestions(res.data))
-      .catch((err) => setError(err.message));
-  }, [id]);
-
+ useEffect(() => {
+  API.get(`/questions/exam/${id}`)
+    .then((res) => setQuestions(res.data))
+    .catch((err) => setError(err.response?.data?.message || err.message))
+    .finally(() => setLoading(false));
+}, [id]);
   useEffect(() => {
     const timer = setInterval(() => setTimeLeft((t) => t - 1), 1000);
     return () => clearInterval(timer);
