@@ -23,12 +23,10 @@ function AdminDashboard() {
           </div>
         </Link>
 
-        <Link to="/admin/students" style={{ color: "inherit" }}>
-          <div className="exam-card">
-            <h3>Students</h3>
-            <p>Students, tests aur accuracy dekhna</p>
-          </div>
-        </Link>
+        <div className="exam-card">
+          <h3>Students</h3>
+          <p>Students aur unke results dekhna (jald aa raha hai)</p>
+        </div>
       </div>
     </div>
   );

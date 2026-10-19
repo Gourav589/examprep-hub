@@ -11,6 +11,8 @@ import AdminDashboard from "./pages/AdminDashboard";
 import AdminExams from "./pages/AdminExams";
 import AdminQuestions from "./pages/AdminQuestions";
 import AdminStudents from "./pages/AdminStudents";
+import JobAlerts from "./pages/JobAlerts";
+import AdminJobs from "./pages/AdminJobs";
 function App() {
   return (
     <>
@@ -26,6 +28,8 @@ function App() {
      <Route path="/admin/exams"element={<AdminRoute> <AdminExams /></AdminRoute> }/>
       <Route path="/admin/questions"element={<AdminRoute> <AdminQuestions /></AdminRoute> }/>
      <Route path="/admin/students"element={<AdminRoute> <AdminStudents /></AdminRoute>}/>
+     <Route path="/jobs" element={<JobAlerts />} />
+     <Route path="/admin/jobs"element={<AdminRoute> <AdminJobs /> </AdminRoute> }/>
       </Routes>
     </>
   );

@@ -1,6 +1,6 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import "./Navbar.css";
-
+import logo from "../assets/logo.png";
 function Navbar() {
   const navigate = useNavigate();
   useLocation(); // page badalne par Navbar dobara render hota hai
@@ -15,7 +15,10 @@ function Navbar() {
 
   return (
     <nav className="navbar">
-      <Link to="/" className="logo">ExamPrep Hub</Link>
+   <Link to="/" className="logo">
+  <img src={logo} alt="ExamPrep Hub" className="logo-img" />
+ 
+</Link>
       <div className="nav-links">
         <Link to="/">Home</Link>
         <Link to="/exams">Mock Tests</Link>
