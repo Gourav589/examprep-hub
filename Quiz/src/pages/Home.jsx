@@ -30,7 +30,7 @@ function Home() {
 
       <section className="section">
         <h2>Popular Exams</h2>
-       
+      
         <div className="exam-grid">
           {exams.map((exam) => (
             <ExamCard key={exam._id} exam={exam} />
