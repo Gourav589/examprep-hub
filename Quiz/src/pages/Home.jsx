@@ -4,8 +4,15 @@ import ExamCard from "../components/ExamCard";
 import API from "../services/api";
 import "./Home.css";
 
+const RADIUS = 38;
+const CIRC = 2 * Math.PI * RADIUS;
+
 function Home() {
   const [exams, setExams] = useState([]);
+  const [attempts, setAttempts] = useState([]);
+
+  const user = JSON.parse(localStorage.getItem("user"));
+  const isStudent = user && user.role !== "admin";
 
   useEffect(() => {
     API.get("/exams")
@@ -15,7 +22,29 @@ function Home() {
       .catch((err) => console.log(err));
   }, []);
 
+  useEffect(() => {
+    if (!isStudent) return;
+    API.get("/attempts/my")
+      .then((res) => {
+        if (Array.isArray(res.data)) setAttempts(res.data);
+      })
+      .catch(() => {});
+  }, [isStudent]);
+
   const totalTests = exams.reduce((sum, e) => sum + (e.tests || 0), 0);
+
+  // Progress ka hisaab
+  const testsDone = attempts.length;
+  const totalCorrect = attempts.reduce((s, a) => s + (a.correct || 0), 0);
+  const totalQuestions = attempts.reduce((s, a) => s + (a.total || 0), 0);
+  const accuracy = totalQuestions
+    ? Math.round((totalCorrect / totalQuestions) * 100)
+    : 0;
+  const bestPct = attempts.reduce((best, a) => {
+    const p = a.total ? Math.round((a.correct / a.total) * 100) : 0;
+    return p > best ? p : best;
+  }, 0);
+  const offset = CIRC * (1 - accuracy / 100);
 
   return (
     <>
@@ -53,6 +82,80 @@ function Home() {
         </div>
       </div>
 
+      {isStudent && (
+        <section className="section">
+          <div className="progress-card">
+            <div className="progress-head">
+              <h2>Your Progress</h2>
+              <Link to="/my-results">View details</Link>
+            </div>
+
+            {testsDone === 0 ? (
+              <p className="progress-empty">
+                Abhi tak koi test nahi diya. Pehla test dekar apni progress shuru karo!
+              </p>
+            ) : (
+              <div className="progress-body">
+                <div className="progress-ring">
+                  <svg width="110" height="110" viewBox="0 0 110 110">
+                    <circle cx="55" cy="55" r={RADIUS} className="pr-bg" />
+                    <circle
+                      cx="55"
+                      cy="55"
+                      r={RADIUS}
+                      className="pr-fg"
+                      strokeDasharray={CIRC}
+                      strokeDashoffset={offset}
+                    />
+                  </svg>
+                  <div className="progress-ring-text">
+                    <strong>{accuracy}%</strong>
+                    <span>Accuracy</span>
+                  </div>
+                </div>
+
+                <div className="progress-stats">
+                  <div className="pstat">
+                    <span className="pstat-icon green">✔</span>
+                    <div>
+                      <strong>{testsDone}</strong>
+                      <small>Tests diye</small>
+                    </div>
+                  </div>
+                  <div className="pstat">
+                    <span className="pstat-icon orange">★</span>
+                    <div>
+                      <strong>{totalCorrect}</strong>
+                      <small>Sahi jawab</small>
+                    </div>
+                  </div>
+                  <div className="pstat">
+                    <span className="pstat-icon blue">🏆</span>
+                    <div>
+                      <strong>{bestPct}%</strong>
+                      <small>Best score</small>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="progress-recent">
+                  <h4>Recent tests</h4>
+                  {attempts.slice(0, 3).map((a) => {
+                    const p = a.total ? Math.round((a.correct / a.total) * 100) : 0;
+                    return (
+                      <div key={a._id} className="recent-row">
+                        <span>{a.exam ? a.exam.name : "Exam"}</span>
+                        <strong>{p}%</strong>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </div>
+        </section>
+      )}
+
       <section className="section">
         <h2>Popular Exams</h2>
         <div className="exam-grid">
@@ -61,7 +164,7 @@ function Home() {
           ))}
         </div>
         <p style={{ marginTop: "20px" }}>
-          <Link to="/exams" className="card-btn">More</Link>
+          <Link to="/exams" className="card-btn">Saare exams dekho</Link>
         </p>
       </section>
     </>
