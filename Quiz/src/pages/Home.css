@@ -1,18 +1,59 @@
 .hero {
-  text-align: center;
-  padding: 80px 20px;
   background: linear-gradient(135deg, #4f46e5, #7c3aed);
   color: white;
+  padding: 70px 20px 90px;
+  position: relative;
+  overflow: hidden;
 }
 
-.hero h1 {
+.hero::before,
+.hero::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.hero::before {
+  width: 300px;
+  height: 300px;
+  top: -100px;
+  right: -60px;
+}
+
+.hero::after {
+  width: 200px;
+  height: 200px;
+  bottom: -80px;
+  left: -40px;
+}
+
+.hero-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+}
+
+.hero-text h1 {
   font-size: 42px;
   margin-bottom: 15px;
 }
 
-.hero p {
+.hero-text p {
   font-size: 18px;
   margin-bottom: 30px;
+  max-width: 480px;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
 .hero-btn {
@@ -22,6 +63,50 @@
   color: #4f46e5;
   border-radius: 8px;
   font-weight: 600;
+}
+
+.hero-btn-outline {
+  display: inline-block;
+  padding: 12px 28px;
+  border: 2px solid white;
+  color: white;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.hero-img {
+  max-width: 380px;
+  width: 100%;
+  height: auto;
+}
+
+.stats-strip {
+  max-width: 800px;
+  margin: -45px auto 0;
+  padding: 0 20px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  position: relative;
+  z-index: 2;
+}
+
+.stat-box {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+}
+
+.stat-box h2 {
+  color: #4f46e5;
+  font-size: 28px;
+}
+
+.stat-box p {
+  color: #6b7280;
+  font-size: 14px;
 }
 
 .section {
@@ -38,6 +123,12 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 20px;
+}
+
+.band {
+  background: #eef2ff;
+  padding: 10px 0 30px;
+  margin-top: 40px;
 }
 
 .steps-grid {
@@ -69,4 +160,23 @@
 .step-box p {
   color: #6b7280;
   margin-top: 6px;
+}
+
+@media (max-width: 700px) {
+  .hero-inner {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .hero-text h1 {
+    font-size: 30px;
+  }
+
+  .hero-actions {
+    justify-content: center;
+  }
+
+  .hero-img {
+    max-width: 260px;
+  }
 }
