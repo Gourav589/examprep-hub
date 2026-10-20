@@ -7,7 +7,7 @@ function Footer() {
       <div className="footer-inner">
         <div>
           <h3>ExamPrep Hub</h3>
-          <p>Govt exams ke liye free mock tests aur latest job alerts.</p>
+          <p>Govt exams free mock tests or latest job alerts.</p>
         </div>
         <div className="footer-links">
           <Link to="/exams">Mock Tests</Link>

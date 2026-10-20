@@ -61,32 +61,9 @@ function Home() {
           ))}
         </div>
         <p style={{ marginTop: "20px" }}>
-          <Link to="/exams" className="card-btn">Saare exams dekho</Link>
+          <Link to="/exams" className="card-btn">More</Link>
         </p>
       </section>
-
-      <div className="band">
-        <section className="section">
-          <h2>Kaise kaam karta hai</h2>
-          <div className="steps-grid">
-            <div className="step-box">
-              <span className="step-num">1</span>
-              <h3>Account banao</h3>
-              <p>Free signup karo, sirf 1 minute lagta hai.</p>
-            </div>
-            <div className="step-box">
-              <span className="step-num">2</span>
-              <h3>Test do</h3>
-              <p>Apna exam chuno aur timer ke saath mock test do.</p>
-            </div>
-            <div className="step-box">
-              <span className="step-num">3</span>
-              <h3>Result dekho</h3>
-              <p>Score, accuracy aur section-wise analysis turant paao.</p>
-            </div>
-          </div>
-        </section>
-      </div>
     </>
   );
 }

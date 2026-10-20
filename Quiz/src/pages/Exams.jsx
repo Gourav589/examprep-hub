@@ -1,14 +1,20 @@
 import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import ExamCard from "../components/ExamCard";
 import API from "../services/api";
 import "./Exams.css";
 
 function Exams() {
+  const [params] = useSearchParams();
   const [exams, setExams] = useState([]);
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState(params.get("search") || "");
   const [category, setCategory] = useState("All");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setSearch(params.get("search") || "");
+  }, [params]);
 
   useEffect(() => {
     API.get("/exams")
@@ -30,15 +36,13 @@ function Exams() {
   return (
     <div className="section">
       <h1>Mock Tests</h1>
-      <p style={{ color: "#6b7280", marginBottom: "20px" }}>
-        Apna exam chuno aur free mock test se practice shuru karo.
-      </p>
+     
 
       {error && <p style={{ color: "red" }}>{error}</p>}
 
       <input
         className="exam-search"
-        placeholder="Exam dhoondho (jaise SSC, Bank)"
+        placeholder="Search"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
       />

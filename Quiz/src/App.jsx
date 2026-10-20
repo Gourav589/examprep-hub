@@ -1,6 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
+import Layout from "./components/Layout";
 import AdminRoute from "./components/AdminRoute";
 import Home from "./pages/Home";
 import Exams from "./pages/Exams";
@@ -19,8 +18,7 @@ import AdminJobs from "./pages/AdminJobs";
 
 function App() {
   return (
-    <>
-      <Navbar />
+    <Layout>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/exams" element={<Exams />} />
@@ -38,8 +36,7 @@ function App() {
         <Route path="/admin/students" element={<AdminRoute><AdminStudents /></AdminRoute>} />
         <Route path="/admin/jobs" element={<AdminRoute><AdminJobs /></AdminRoute>} />
       </Routes>
-      <Footer />
-    </>
+    </Layout>
   );
 }
 

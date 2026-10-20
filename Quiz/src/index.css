@@ -1,3 +1,13 @@
+:root {
+  --primary: #2563eb;
+  --navy: #0f172a;
+  --bg: #f8fafc;
+  --green: #10b981;
+  --text: #1e293b;
+  --muted: #64748b;
+  --border: #e2e8f0;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -11,10 +21,9 @@ body,
 }
 
 body {
-  font-family: "Segoe UI", Arial, sans-serif;
-  background: linear-gradient(160deg, #c7d2fe 0%, #ddd6fe 50%, #fbcfe8 100%);
-  background-attachment: fixed;
-  color: #1f2937;
+  font-family: "Inter", "Segoe UI", Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
 }
 
 a {
@@ -24,5 +33,11 @@ a {
 h1,
 h2,
 h3 {
-  color: #312e81;
+  color: var(--navy);
+}
+
+.hero h1,
+.hero h2,
+.hero h3 {
+  color: white;
 }
