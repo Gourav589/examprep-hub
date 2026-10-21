@@ -51,3 +51,139 @@
 .auth-switch a {
   color: #4f46e5;
 }
+
+.au-page {
+  display: flex;
+  justify-content: center;
+  padding: 50px 20px;
+}
+
+.au-card {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
+  max-width: 880px;
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 12px 36px rgba(15, 23, 42, 0.15);
+}
+
+.au-side {
+  background: linear-gradient(145deg, #1e3a8a, #4f46e5 60%, #7c3aed);
+  color: white;
+  padding: 40px 34px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.au-side h2 {
+  color: white;
+  font-size: 28px;
+  margin-bottom: 12px;
+}
+
+.au-side p {
+  opacity: 0.9;
+  margin-bottom: 22px;
+}
+
+.au-points {
+  list-style: none;
+}
+
+.au-points li {
+  margin-bottom: 10px;
+  font-size: 15px;
+}
+
+.au-form {
+  padding: 40px 34px;
+}
+
+.au-form h2 {
+  margin-bottom: 6px;
+}
+
+.au-sub {
+  color: #64748b;
+  margin-bottom: 22px;
+  font-size: 14px;
+}
+
+.au-form label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 6px;
+}
+
+.au-form input {
+  width: 100%;
+  padding: 12px 14px;
+  margin-bottom: 16px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 15px;
+  background: #f8fafc;
+  outline: none;
+}
+
+.au-form input:focus {
+  border-color: #2563eb;
+  background: white;
+}
+
+.au-btn {
+  width: 100%;
+  padding: 13px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.au-btn:hover {
+  background: #1d4ed8;
+}
+
+.au-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.au-error {
+  background: #fee2e2;
+  color: #b91c1c;
+  padding: 10px 12px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+
+.au-switch {
+  margin-top: 18px;
+  text-align: center;
+  font-size: 14px;
+  color: #64748b;
+}
+
+.au-switch a {
+  color: #2563eb;
+  font-weight: 600;
+}
+
+@media (max-width: 760px) {
+  .au-card {
+    grid-template-columns: 1fr;
+  }
+
+  .au-side {
+    padding: 26px;
+  }
+}
