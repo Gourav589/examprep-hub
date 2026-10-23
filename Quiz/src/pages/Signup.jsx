@@ -2,8 +2,9 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import API from "../services/api";
 import "./Auth.css";
-
+import useSeo from "../hooks/useSeo";
 function Signup() {
+  useSeo("Create Free Account | ExamPrep Hub", "Sign up free and start practicing govt exam mock tests today.");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

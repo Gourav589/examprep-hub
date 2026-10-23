@@ -1,8 +1,12 @@
 import { useState, useEffect } from "react";
 import API from "../services/api";
 import "./JobAlerts.css";
-
+import useSeo from "../hooks/useSeo";
 function JobAlerts() {
+  useSeo(
+  "Latest Govt Job Alerts 2026 | ExamPrep Hub",
+  "Latest government job notifications with last date, eligibility and official apply links."
+);
   const [jobs, setJobs] = useState([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);

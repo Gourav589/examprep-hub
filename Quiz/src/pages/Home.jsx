@@ -3,11 +3,15 @@ import { Link } from "react-router-dom";
 import ExamCard from "../components/ExamCard";
 import API from "../services/api";
 import "./Home.css";
-
+import useSeo from "../hooks/useSeo";
 const RADIUS = 38;
 const CIRC = 2 * Math.PI * RADIUS;
 
 function Home() {
+  useSeo(
+  "Free Govt Exam Mock Tests and Job Alerts | ExamPrep Hub",
+  "Practice free mock tests for SSC, Banking, Railway and State Govt exams. Get instant results and the latest govt job alerts."
+);
   const [exams, setExams] = useState([]);
   const [attempts, setAttempts] = useState([]);
 

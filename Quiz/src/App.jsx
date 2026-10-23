@@ -15,7 +15,7 @@ import AdminExams from "./pages/AdminExams";
 import AdminQuestions from "./pages/AdminQuestions";
 import AdminStudents from "./pages/AdminStudents";
 import AdminJobs from "./pages/AdminJobs";
-
+import Leaderboard from "./pages/Leaderboard";
 function App() {
   return (
     <Layout>
@@ -27,6 +27,7 @@ function App() {
         <Route path="/exams/:id" element={<ExamDetail />} />
         <Route path="/exams/:id/test" element={<TestPage />} />
         <Route path="/exams/:id/result" element={<Result />} />
+        <Route path="/exams/:id/leaderboard" element={<Leaderboard />} />
         <Route path="/my-results" element={<MyResults />} />
         <Route path="/jobs" element={<JobAlerts />} />
 

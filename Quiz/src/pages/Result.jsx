@@ -214,6 +214,7 @@ function Result() {
       <div className="rs-links">
         <Link to={`/exams/${id}`} className="rs-btn ghost">Back to Exam</Link>
         <Link to={`/exams/${id}/test`} className="rs-btn primary">Try Again</Link>
+      <Link to={`/exams/${id}/leaderboard`} className="rs-btn ghost">Leaderboard</Link>
       </div>
     </div>
   );

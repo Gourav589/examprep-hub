@@ -3,8 +3,12 @@ import { useSearchParams } from "react-router-dom";
 import ExamCard from "../components/ExamCard";
 import API from "../services/api";
 import "./Exams.css";
-
+import useSeo from "../hooks/useSeo";
 function Exams() {
+  useSeo(
+  "Free Mock Tests for SSC, Banking, Railway | ExamPrep Hub",
+  "Browse all govt exam mock tests. Search by exam name, pick a category and start practicing for free."
+);
   const [params] = useSearchParams();
   const [exams, setExams] = useState([]);
   const [search, setSearch] = useState(params.get("search") || "");
