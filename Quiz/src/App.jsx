@@ -16,6 +16,8 @@ import AdminQuestions from "./pages/AdminQuestions";
 import AdminStudents from "./pages/AdminStudents";
 import AdminJobs from "./pages/AdminJobs";
 import Leaderboard from "./pages/Leaderboard";
+import Profile from "./pages/Profile";
+import Analytics from "./pages/Analytics";
 function App() {
   return (
     <Layout>
@@ -29,13 +31,14 @@ function App() {
         <Route path="/exams/:id/result" element={<Result />} />
         <Route path="/exams/:id/leaderboard" element={<Leaderboard />} />
         <Route path="/my-results" element={<MyResults />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="/jobs" element={<JobAlerts />} />
-
         <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
         <Route path="/admin/exams" element={<AdminRoute><AdminExams /></AdminRoute>} />
         <Route path="/admin/questions" element={<AdminRoute><AdminQuestions /></AdminRoute>} />
         <Route path="/admin/students" element={<AdminRoute><AdminStudents /></AdminRoute>} />
         <Route path="/admin/jobs" element={<AdminRoute><AdminJobs /></AdminRoute>} />
+        <Route path="/analytics" element={<Analytics />} />
       </Routes>
     </Layout>
   );

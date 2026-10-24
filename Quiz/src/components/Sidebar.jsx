@@ -21,8 +21,11 @@ function Sidebar({ open, onClose }) {
     ];
   } else if (user) {
     links.splice(2, 0, { to: "/my-results", label: "My Attempts", icon: "📊" });
+  links.splice(3, 0, { to: "/analytics", label: "Analytics", icon: "📈" });
   }
-
+if (user) {
+  links.push({ to: "/profile", label: "My Profile", icon: "👤" });
+}
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
