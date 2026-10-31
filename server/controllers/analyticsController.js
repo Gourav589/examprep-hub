@@ -9,7 +9,7 @@ exports.getMyAnalytics = async (req, res) => {
 
     const response = await fetch(`${base}/analytics/${req.userId}`, {
       headers: { "x-api-key": key },
-      signal: AbortSignal.timeout(20000),
+    signal: AbortSignal.timeout(60000),
     });
 
     if (!response.ok) {

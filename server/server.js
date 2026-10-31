@@ -7,17 +7,22 @@ connectDB();
 
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL ? process.env.CLIENT_URL.split(",") : true,
+  })
+);
 app.use(express.json());
 
 app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/exams", require("./routes/examRoutes"));
 app.use("/api/questions", require("./routes/questionRoutes"));
+app.use("/api/attempts", require("./routes/attemptRoutes"));
 app.use("/api/admin", require("./routes/adminRoutes"));
 app.use("/api/jobs", require("./routes/jobRoutes"));
-app.use("/api/attempts", require("./routes/attemptRoutes"));
-app.use("/api/analytics", require("./routes/analyticsRoutes"));
 app.use("/api/payments", require("./routes/paymentRoutes"));
+app.use("/api/analytics", require("./routes/analyticsRoutes"));
+
 app.get("/", (req, res) => {
   res.send("ExamPrep Hub API is running");
 });
