@@ -5,6 +5,9 @@ const Exam = require("../models/Exam");
 const User = require("../models/User");
 
 // Premium exam ko kaun khol sakta hai, yeh check karta hai
+const isPremiumActive = (user) =>
+  user.isPremium && (!user.premiumUntil || user.premiumUntil > new Date());
+
 const canAccess = async (examId, userId) => {
   const exam = await Exam.findById(examId);
   if (!exam) return { ok: false, status: 404, message: "Exam not found" };
@@ -15,7 +18,7 @@ const canAccess = async (examId, userId) => {
   }
 
   const user = await User.findById(userId);
-  if (user && (user.isPremium || user.role === "admin")) return { ok: true };
+if (user && (isPremiumActive(user) || user.role === "admin")) return { ok: true };
 
   return { ok: false, status: 403, message: "Premium membership required" };
 };

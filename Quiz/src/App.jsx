@@ -18,6 +18,7 @@ import AdminJobs from "./pages/AdminJobs";
 import Leaderboard from "./pages/Leaderboard";
 import Profile from "./pages/Profile";
 import Analytics from "./pages/Analytics";
+import Membership from "./pages/Membership";
 function App() {
   return (
     <Layout>
@@ -39,6 +40,7 @@ function App() {
         <Route path="/admin/students" element={<AdminRoute><AdminStudents /></AdminRoute>} />
         <Route path="/admin/jobs" element={<AdminRoute><AdminJobs /></AdminRoute>} />
         <Route path="/analytics" element={<Analytics />} />
+        <Route path="/membership" element={<Membership />} />
       </Routes>
     </Layout>
   );

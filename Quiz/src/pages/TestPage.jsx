@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import API from "../services/api";
 import "./TestPage.css";
 
@@ -74,7 +74,20 @@ function TestPage() {
   }, [timeLeft]);
 
   if (loading) return <div className="tp-wrap"><p>Loading...</p></div>;
-  if (error) return <div className="tp-wrap"><p>{error}</p></div>;
+
+  if (error) {
+    return (
+      <div className="tp-wrap">
+        <p>{error}</p>
+        {error.toLowerCase().includes("premium") && (
+          <p style={{ marginTop: "12px" }}>
+            <Link to="/membership" className="card-btn">Premium unlock karo</Link>
+          </p>
+        )}
+      </div>
+    );
+  }
+
   if (questions.length === 0) {
     return (
       <div className="tp-wrap">

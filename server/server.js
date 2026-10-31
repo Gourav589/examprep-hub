@@ -16,6 +16,8 @@ app.use("/api/questions", require("./routes/questionRoutes"));
 app.use("/api/admin", require("./routes/adminRoutes"));
 app.use("/api/jobs", require("./routes/jobRoutes"));
 app.use("/api/attempts", require("./routes/attemptRoutes"));
+app.use("/api/analytics", require("./routes/analyticsRoutes"));
+app.use("/api/payments", require("./routes/paymentRoutes"));
 app.get("/", (req, res) => {
   res.send("ExamPrep Hub API is running");
 });

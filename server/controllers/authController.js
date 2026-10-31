@@ -48,3 +48,59 @@ exports.login = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+exports.updateProfile = async (req, res) => {
+  try {
+    const name = (req.body.name || "").trim();
+    if (name.length < 2) {
+      return res.status(400).json({ message: "Naam kam se kam 2 akshar ka hona chahiye" });
+    }
+
+    const user = await User.findById(req.userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    user.name = name;
+    await user.save();
+
+    res.json({
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+exports.changePassword = async (req, res) => {
+  try {
+    const { oldPassword, newPassword } = req.body;
+
+    if (!oldPassword || !newPassword) {
+      return res.status(400).json({ message: "Dono password bharna zaroori hai" });
+    }
+    if (newPassword.length < 8) {
+      return res.status(400).json({ message: "Naya password kam se kam 8 akshar ka rakho" });
+    }
+
+    const user = await User.findById(req.userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const match = await bcrypt.compare(oldPassword, user.password);
+    if (!match) {
+      return res.status(400).json({ message: "Purana password galat hai" });
+    }
+
+    user.password = await bcrypt.hash(newPassword, 10);
+    await user.save();
+
+    res.json({ message: "Password badal gaya" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};

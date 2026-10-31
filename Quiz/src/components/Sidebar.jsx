@@ -26,6 +26,9 @@ function Sidebar({ open, onClose }) {
 if (user) {
   links.push({ to: "/profile", label: "My Profile", icon: "👤" });
 }
+if (!user || user.role !== "admin") {
+  links.push({ to: "/membership", label: "Premium", icon: "💎" });
+}
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");

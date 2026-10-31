@@ -1,0 +1,89 @@
+.mb-sub {
+  color: #64748b;
+  margin: 6px 0 20px;
+}
+
+.mb-card {
+  max-width: 440px;
+  background: white;
+  border-radius: 18px;
+  padding: 30px;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
+  border-top: 5px solid #2563eb;
+}
+
+.mb-tag {
+  display: inline-block;
+  background: #dbeafe;
+  color: #1d4ed8;
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.mb-price {
+  font-size: 44px;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 14px 0;
+}
+
+.mb-price small {
+  font-size: 16px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.mb-list {
+  list-style: none;
+  margin-bottom: 22px;
+}
+
+.mb-list li {
+  padding: 7px 0;
+  color: #334155;
+}
+
+.mb-btn {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #2563eb, #7c3aed);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 17px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.mb-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.mb-note {
+  margin-top: 14px;
+  font-size: 13px;
+  color: #64748b;
+}
+
+.mb-active,
+.mb-msg {
+  max-width: 440px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+
+.mb-active,
+.mb-msg.ok {
+  background: #d1fae5;
+  color: #047857;
+}
+
+.mb-msg.err {
+  background: #fee2e2;
+  color: #b91c1c;
+}
