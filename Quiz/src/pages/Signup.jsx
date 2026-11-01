@@ -77,6 +77,10 @@ function Signup() {
             <button type="submit" className="au-btn" disabled={loading}>
               {loading ? "Please wait..." : "Sign Up"}
             </button>
+            <p className="au-terms">
+  Sign up karke aap hamari <Link to="/terms">Terms</Link> aur{" "}
+  <Link to="/privacy">Privacy Policy</Link> se sehmat hote ho.
+</p>
           </form>
 
           <p className="au-switch">

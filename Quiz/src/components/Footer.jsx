@@ -7,12 +7,18 @@ function Footer() {
       <div className="footer-inner">
         <div>
           <h3>ExamPrep Hub</h3>
-          <p>Govt exams free mock tests or latest job alerts.</p>
+          <p>Govt exams ke liye free mock tests aur latest job alerts.</p>
         </div>
         <div className="footer-links">
           <Link to="/exams">Mock Tests</Link>
           <Link to="/jobs">Job Alerts</Link>
-          <Link to="/login">Login</Link>
+          <Link to="/membership">Premium</Link>
+        </div>
+        <div className="footer-links">
+          <Link to="/terms">Terms</Link>
+          <Link to="/privacy">Privacy</Link>
+          <Link to="/refund-policy">Refund</Link>
+          <Link to="/contact">Contact</Link>
         </div>
       </div>
       <p className="footer-copy">© 2026 ExamPrep Hub. All rights reserved.</p>

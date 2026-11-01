@@ -19,6 +19,9 @@ import Leaderboard from "./pages/Leaderboard";
 import Profile from "./pages/Profile";
 import Analytics from "./pages/Analytics";
 import Membership from "./pages/Membership";
+import Legal from "./pages/Legal";
+import Contact from "./pages/Contact";
+import NotFound from "./pages/NotFound";
 function App() {
   return (
     <Layout>
@@ -41,6 +44,11 @@ function App() {
         <Route path="/admin/jobs" element={<AdminRoute><AdminJobs /></AdminRoute>} />
         <Route path="/analytics" element={<Analytics />} />
         <Route path="/membership" element={<Membership />} />
+        <Route path="/terms" element={<Legal kind="terms" />} />
+        <Route path="/privacy" element={<Legal kind="privacy" />} />
+        <Route path="/refund-policy" element={<Legal kind="refund" />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Layout>
   );
