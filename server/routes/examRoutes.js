@@ -3,6 +3,7 @@ const {
   getExams,
   getExamById,
   createExam,
+  updateExam,
   deleteExam,
 } = require("../controllers/examController");
 const protect = require("../middleware/authMiddleware");
@@ -14,6 +15,7 @@ router.get("/", getExams);
 router.get("/:id", getExamById);
 
 router.post("/", protect, adminOnly, createExam);
+router.put("/:id", protect, adminOnly, updateExam);
 router.delete("/:id", protect, adminOnly, deleteExam);
 
 module.exports = router;

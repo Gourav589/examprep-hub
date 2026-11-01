@@ -4,10 +4,10 @@ const Attempt = require("../models/Attempt");
 const Exam = require("../models/Exam");
 const User = require("../models/User");
 
-// Premium exam ko kaun khol sakta hai, yeh check karta hai
 const isPremiumActive = (user) =>
   user.isPremium && (!user.premiumUntil || user.premiumUntil > new Date());
 
+// Premium exam ko kaun khol sakta hai, yeh check karta hai
 const canAccess = async (examId, userId) => {
   const exam = await Exam.findById(examId);
   if (!exam) return { ok: false, status: 404, message: "Exam not found" };
@@ -18,9 +18,29 @@ const canAccess = async (examId, userId) => {
   }
 
   const user = await User.findById(userId);
-if (user && (isPremiumActive(user) || user.role === "admin")) return { ok: true };
+  if (user && (isPremiumActive(user) || user.role === "admin")) return { ok: true };
 
   return { ok: false, status: 403, message: "Premium membership required" };
+};
+
+// Ek exam ke kaun-kaun se tests hain
+exports.getTestsForExam = async (req, res) => {
+  try {
+    const { examId } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(examId)) {
+      return res.status(400).json({ message: "Invalid exam id" });
+    }
+
+    const rows = await Question.aggregate([
+      { $match: { exam: new mongoose.Types.ObjectId(examId) } },
+      { $group: { _id: "$testNumber", questions: { $sum: 1 } } },
+      { $sort: { _id: 1 } },
+    ]);
+
+    res.json(rows.map((r) => ({ testNumber: r._id, questions: r.questions })));
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
 
 exports.getQuestionsByExam = async (req, res) => {
@@ -49,7 +69,8 @@ exports.getQuestionsByExam = async (req, res) => {
 exports.submitTest = async (req, res) => {
   try {
     const { examId } = req.params;
-    const { testNumber = 1, answers = {} } = req.body;
+    const testNumber = Number(req.body.testNumber) || 1;
+    const answers = req.body.answers && typeof req.body.answers === "object" ? req.body.answers : {};
 
     if (!mongoose.Types.ObjectId.isValid(examId)) {
       return res.status(400).json({ message: "Invalid exam id" });
@@ -61,6 +82,12 @@ exports.submitTest = async (req, res) => {
     }
 
     const questions = await Question.find({ exam: examId, testNumber });
+    if (questions.length === 0) {
+      return res.status(400).json({ message: "Is test mein koi question nahi hai" });
+    }
+
+    const exam = await Exam.findById(examId);
+    const negativeMarking = exam ? exam.negativeMarking || 0 : 0;
 
     let correct = 0;
     let wrong = 0;
@@ -91,6 +118,9 @@ exports.submitTest = async (req, res) => {
       };
     });
 
+    // Marks = sahi jawab minus galat jawab ka negative marking (0 se neeche nahi)
+    const marks = Math.max(0, Math.round((correct - wrong * negativeMarking) * 100) / 100);
+
     await Attempt.create({
       user: req.userId,
       exam: examId,
@@ -99,7 +129,7 @@ exports.submitTest = async (req, res) => {
       correct,
       wrong,
       skipped,
-      score: correct,
+      score: marks,
       sections,
     });
 
@@ -108,7 +138,10 @@ exports.submitTest = async (req, res) => {
       correct,
       wrong,
       skipped,
-      score: correct,
+      score: marks,
+      marks,
+      negativeMarking,
+      testNumber,
       sections,
       review,
     });

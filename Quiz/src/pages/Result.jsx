@@ -23,8 +23,26 @@ function Result() {
     );
   }
 
-  const { total, correct, wrong, skipped, sections = {}, review = [] } = state;
-  const pct = total ? Math.round((correct / total) * 100) : 0;
+  const {
+    total,
+    correct,
+    wrong,
+    skipped,
+    sections = {},
+    review = [],
+    negativeMarking = 0,
+    testNumber = 1,
+  } = state;
+
+  const marks =
+    typeof state.marks === "number"
+      ? state.marks
+      : typeof state.score === "number"
+      ? state.score
+      : correct;
+
+  const pct = total ? Math.round((marks / total) * 100) : 0;
+  const penalty = Math.round(wrong * negativeMarking * 100) / 100;
 
   let title = "Don't give up!";
   let note = "Galtiyon se seekho aur dobara try karo.";
@@ -39,7 +57,6 @@ function Result() {
     note = "Thodi aur practice se score tezi se badhega.";
   }
 
-  // Donut ke teen hisse: sahi, galat, skip
   const seg = (n) => (total ? (n / total) * CIRC : 0);
   const segments = [
     { len: seg(correct), color: "#34d399" },
@@ -61,17 +78,19 @@ function Result() {
     ? [...sectionList].sort((a, b) => a.pct - b.pct)[0]
     : null;
 
+  const retryLink = `/exams/${id}/test?test=${testNumber}`;
+
   return (
     <div className="rs-wrap">
       <div className="rs-hero">
         <div className="rs-hero-text">
-          <span className="rs-tag">TEST COMPLETE</span>
+          <span className="rs-tag">TEST {testNumber} COMPLETE</span>
           <h1>{title}</h1>
           <p>{note}</p>
           <div className="rs-stats">
             <div className="rs-stat">
               <small>SCORE</small>
-              <strong>{correct} / {total}</strong>
+              <strong>{marks} / {total}</strong>
             </div>
             <div className="rs-stat">
               <small>CORRECT</small>
@@ -86,6 +105,11 @@ function Result() {
               <strong>{skipped}</strong>
             </div>
           </div>
+          {negativeMarking > 0 && (
+            <p style={{ marginTop: "12px", fontSize: "14px" }}>
+              Negative marking: {wrong} galat x {negativeMarking} = -{penalty} marks
+            </p>
+          )}
         </div>
 
         <div className="rs-donut">
@@ -148,11 +172,19 @@ function Result() {
             <h3>Recommended next</h3>
           </div>
 
-          <Link to={`/exams/${id}/test`} className="rs-reco">
+          <Link to={retryLink} className="rs-reco">
             <span className="rs-reco-icon">🔁</span>
             <div>
-              <strong>Dobara test do</strong>
+              <strong>Yahi test dobara do</strong>
               <small>Apna score behtar karo</small>
+            </div>
+          </Link>
+
+          <Link to={`/exams/${id}`} className="rs-reco">
+            <span className="rs-reco-icon">🧪</span>
+            <div>
+              <strong>Doosra test chuno</strong>
+              <small>Is exam ke saare tests dekho</small>
             </div>
           </Link>
 
@@ -175,14 +207,6 @@ function Result() {
               </div>
             </Link>
           )}
-
-          <Link to="/exams" className="rs-reco">
-            <span className="rs-reco-icon">📝</span>
-            <div>
-              <strong>Doosra exam chuno</strong>
-              <small>Saare mock tests dekho</small>
-            </div>
-          </Link>
         </div>
       </div>
 
@@ -213,8 +237,8 @@ function Result() {
 
       <div className="rs-links">
         <Link to={`/exams/${id}`} className="rs-btn ghost">Back to Exam</Link>
-        <Link to={`/exams/${id}/test`} className="rs-btn primary">Try Again</Link>
-      <Link to={`/exams/${id}/leaderboard`} className="rs-btn ghost">Leaderboard</Link>
+        <Link to={`/exams/${id}/leaderboard`} className="rs-btn ghost">Leaderboard</Link>
+        <Link to={retryLink} className="rs-btn primary">Try Again</Link>
       </div>
     </div>
   );

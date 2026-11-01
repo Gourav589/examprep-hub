@@ -6,6 +6,8 @@ const examSchema = new mongoose.Schema(
     category: { type: String, required: true },
     tests: { type: Number, default: 0 },
     free: { type: Boolean, default: true },
+    durationMinutes: { type: Number, default: 10, min: 1, max: 300 },
+    negativeMarking: { type: Number, default: 0, min: 0, max: 1 },
   },
   { timestamps: true }
 );

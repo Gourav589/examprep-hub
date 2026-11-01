@@ -2,9 +2,19 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import API from "../services/api";
 
+const emptyForm = {
+  name: "",
+  category: "",
+  tests: 0,
+  free: true,
+  durationMinutes: 10,
+  negativeMarking: 0,
+};
+
 function AdminExams() {
   const [exams, setExams] = useState([]);
-  const [form, setForm] = useState({ name: "", category: "", tests: 0, free: true });
+  const [form, setForm] = useState(emptyForm);
+  const [editingId, setEditingId] = useState(null);
   const [message, setMessage] = useState("");
 
   const loadExams = () => {
@@ -22,24 +32,48 @@ function AdminExams() {
     setForm({ ...form, [name]: type === "checkbox" ? checked : value });
   };
 
-  const handleAdd = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage("");
     try {
-      await API.post("/exams", form);
-      setForm({ name: "", category: "", tests: 0, free: true });
-      setMessage("Exam added");
+      if (editingId) {
+        await API.put(`/exams/${editingId}`, form);
+        setMessage("Exam update ho gaya");
+      } else {
+        await API.post("/exams", form);
+        setMessage("Exam add ho gaya");
+      }
+      setForm(emptyForm);
+      setEditingId(null);
       loadExams();
     } catch (err) {
       setMessage(err.response?.data?.message || err.message);
     }
   };
 
+  const startEdit = (exam) => {
+    setEditingId(exam._id);
+    setForm({
+      name: exam.name,
+      category: exam.category,
+      tests: exam.tests,
+      free: exam.free,
+      durationMinutes: exam.durationMinutes || 10,
+      negativeMarking: exam.negativeMarking || 0,
+    });
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const cancelEdit = () => {
+    setEditingId(null);
+    setForm(emptyForm);
+  };
+
   const handleDelete = async (id, name) => {
     if (!window.confirm(`Delete "${name}" and all its questions?`)) return;
     try {
       await API.delete(`/exams/${id}`);
-      setMessage("Exam deleted");
+      setMessage("Exam delete ho gaya");
       loadExams();
     } catch (err) {
       setMessage(err.response?.data?.message || err.message);
@@ -53,9 +87,9 @@ function AdminExams() {
 
       {message && <p style={{ margin: "15px 0", color: "#4f46e5" }}>{message}</p>}
 
-      <div className="auth-box" style={{ margin: "20px 0", maxWidth: "500px" }}>
-        <h2>Add New Exam</h2>
-        <form onSubmit={handleAdd}>
+      <div className="auth-box" style={{ margin: "20px 0", maxWidth: "520px" }}>
+        <h2>{editingId ? "Exam edit karo" : "Add New Exam"}</h2>
+        <form onSubmit={handleSubmit}>
           <input
             name="name"
             placeholder="Exam name (e.g. UPSC Prelims)"
@@ -74,10 +108,31 @@ function AdminExams() {
             name="tests"
             type="number"
             min="0"
-            placeholder="Number of mock tests"
+            placeholder="Number of mock tests (card par dikhega)"
             value={form.tests}
             onChange={handleChange}
           />
+          <input
+            name="durationMinutes"
+            type="number"
+            min="1"
+            max="300"
+            placeholder="Har test ka time (minute)"
+            value={form.durationMinutes}
+            onChange={handleChange}
+          />
+          <select
+            name="negativeMarking"
+            value={form.negativeMarking}
+            onChange={handleChange}
+            style={{ width: "100%", padding: "12px", marginBottom: "15px" }}
+          >
+            <option value={0}>Negative marking nahi</option>
+            <option value={0.25}>0.25 per galat jawab</option>
+            <option value={0.33}>0.33 per galat jawab</option>
+            <option value={0.5}>0.5 per galat jawab</option>
+            <option value={1}>1 per galat jawab</option>
+          </select>
           <label style={{ display: "block", marginBottom: "15px" }}>
             <input
               name="free"
@@ -88,7 +143,16 @@ function AdminExams() {
             />
             Free exam
           </label>
-          <button type="submit">Add Exam</button>
+          <button type="submit">{editingId ? "Save Changes" : "Add Exam"}</button>
+          {editingId && (
+            <button
+              type="button"
+              onClick={cancelEdit}
+              style={{ marginTop: "10px", background: "#64748b" }}
+            >
+              Cancel
+            </button>
+          )}
         </form>
       </div>
 
@@ -102,27 +166,46 @@ function AdminExams() {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
+            gap: "12px",
+            flexWrap: "wrap",
           }}
         >
           <div>
             <h3>{exam.name}</h3>
             <p>
-              {exam.category} | {exam.tests} tests | {exam.free ? "Free" : "Premium"}
+              {exam.category} | {exam.tests} tests | {exam.free ? "Free" : "Premium"} |{" "}
+              {exam.durationMinutes || 10} min |{" "}
+              {exam.negativeMarking ? `-${exam.negativeMarking} negative` : "no negative"}
             </p>
           </div>
-          <button
-            onClick={() => handleDelete(exam._id, exam.name)}
-            style={{
-              padding: "8px 16px",
-              background: "#ef4444",
-              color: "white",
-              border: "none",
-              borderRadius: "6px",
-              cursor: "pointer",
-            }}
-          >
-            Delete
-          </button>
+          <div style={{ display: "flex", gap: "8px" }}>
+            <button
+              onClick={() => startEdit(exam)}
+              style={{
+                padding: "8px 16px",
+                background: "#2563eb",
+                color: "white",
+                border: "none",
+                borderRadius: "6px",
+                cursor: "pointer",
+              }}
+            >
+              Edit
+            </button>
+            <button
+              onClick={() => handleDelete(exam._id, exam.name)}
+              style={{
+                padding: "8px 16px",
+                background: "#ef4444",
+                color: "white",
+                border: "none",
+                borderRadius: "6px",
+                cursor: "pointer",
+              }}
+            >
+              Delete
+            </button>
+          </div>
         </div>
       ))}
     </div>

@@ -1,15 +1,16 @@
 import { useState, useEffect } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, useNavigate, useSearchParams, Link } from "react-router-dom";
 import API from "../services/api";
 import "./TestPage.css";
 
-const TOTAL_SECONDS = 10 * 60;
 const LETTERS = ["A", "B", "C", "D"];
 const RADIUS = 34;
 const CIRC = 2 * Math.PI * RADIUS;
 
 function TestPage() {
   const { id } = useParams();
+  const [params] = useSearchParams();
+  const testNumber = Number(params.get("test")) || 1;
   const navigate = useNavigate();
 
   const [exam, setExam] = useState(null);
@@ -18,22 +19,43 @@ function TestPage() {
   const [answers, setAnswers] = useState({});
   const [marked, setMarked] = useState({});
   const [visited, setVisited] = useState({});
-  const [timeLeft, setTimeLeft] = useState(TOTAL_SECONDS);
+  const [totalSeconds, setTotalSeconds] = useState(600);
+  const [timeLeft, setTimeLeft] = useState(600);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [submitError, setSubmitError] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-    API.get(`/exams/${id}`)
-      .then((res) => setExam(res.data))
-      .catch(() => {});
+    let cancelled = false;
 
-    API.get(`/questions/exam/${id}`)
-      .then((res) => setQuestions(res.data))
-      .catch((err) => setError(err.response?.data?.message || err.message))
-      .finally(() => setLoading(false));
-  }, [id]);
+    async function load() {
+      try {
+        const [examRes, qRes] = await Promise.all([
+          API.get(`/exams/${id}`).catch(() => null),
+          API.get(`/questions/exam/${id}`, { params: { test: testNumber } }),
+        ]);
+        if (cancelled) return;
+
+        const ex = examRes ? examRes.data : null;
+        const secs = (ex && ex.durationMinutes ? ex.durationMinutes : 10) * 60;
+
+        setExam(ex);
+        setTotalSeconds(secs);
+        setTimeLeft(secs);
+        setQuestions(qRes.data);
+      } catch (err) {
+        if (!cancelled) setError(err.response?.data?.message || err.message);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+
+    load();
+    return () => {
+      cancelled = true;
+    };
+  }, [id, testNumber]);
 
   const started = questions.length > 0;
 
@@ -58,7 +80,7 @@ function TestPage() {
     setSubmitError("");
     try {
       const { data } = await API.post(`/questions/exam/${id}/submit`, {
-        testNumber: 1,
+        testNumber,
         answers,
       });
       navigate(`/exams/${id}/result`, { state: data });
@@ -91,7 +113,10 @@ function TestPage() {
   if (questions.length === 0) {
     return (
       <div className="tp-wrap">
-        <p>Is exam ke questions abhi available nahi hain.</p>
+        <p>Is test ke questions abhi available nahi hain.</p>
+        <p style={{ marginTop: "12px" }}>
+          <Link to={`/exams/${id}`} className="card-btn">Back to Exam</Link>
+        </p>
       </div>
     );
   }
@@ -99,6 +124,7 @@ function TestPage() {
   const q = questions[current];
   const answeredCount = Object.keys(answers).length;
   const progressPct = Math.round((answeredCount / questions.length) * 100);
+  const neg = exam ? exam.negativeMarking || 0 : 0;
 
   const formatTime = (s) => {
     const m = String(Math.floor(s / 60)).padStart(2, "0");
@@ -130,15 +156,19 @@ function TestPage() {
   };
 
   const timeSafe = Math.max(timeLeft, 0);
-  const offset = CIRC * (1 - timeSafe / TOTAL_SECONDS);
+  const offset = CIRC * (1 - timeSafe / totalSeconds);
+  const warnAt = Math.min(60, Math.floor(totalSeconds / 5));
 
   return (
     <div className="tp-wrap">
       <div className="tp-header">
         <div className="tp-title">
-          <p className="tp-exam">{exam ? exam.name : "Mock Test"}</p>
+          <p className="tp-exam">
+            {exam ? exam.name : "Mock Test"} | Test {testNumber}
+          </p>
           <p className="tp-sub">
             Answered {answeredCount} / {questions.length}
+            {neg > 0 && ` | Galat jawab par -${neg}`}
           </p>
           <div className="tp-progress">
             <div className="tp-progress-fill" style={{ width: `${progressPct}%` }} />
@@ -214,7 +244,7 @@ function TestPage() {
                   cx="45"
                   cy="45"
                   r={RADIUS}
-                  className={"ring-fg" + (timeSafe < 60 ? " danger" : "")}
+                  className={"ring-fg" + (timeSafe < warnAt ? " danger" : "")}
                   strokeDasharray={CIRC}
                   strokeDashoffset={offset}
                 />

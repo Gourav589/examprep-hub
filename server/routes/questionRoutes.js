@@ -1,6 +1,7 @@
 const express = require("express");
 const {
   getQuestionsByExam,
+  getTestsForExam,
   submitTest,
   getQuestionsForAdmin,
   createQuestion,
@@ -9,8 +10,10 @@ const {
 const protect = require("../middleware/authMiddleware");
 const adminOnly = require("../middleware/adminMiddleware");
 const optionalAuth = require("../middleware/optionalAuth");
+
 const router = express.Router();
 
+router.get("/exam/:examId/tests", getTestsForExam);
 router.get("/exam/:examId", optionalAuth, getQuestionsByExam);
 router.post("/exam/:examId/submit", protect, submitTest);
 
