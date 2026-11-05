@@ -8,6 +8,13 @@ const userSchema = new mongoose.Schema(
     isPremium: { type: Boolean, default: false },
     role: { type: String, enum: ["student", "admin"], default: "student" },
     premiumUntil: { type: Date, default: null },
+    emailVerified: { type: Boolean, default: false },
+    verifyCodeHash: { type: String, default: null, select: false },
+    verifyCodeExpires: { type: Date, default: null, select: false },
+    verifyAttempts: { type: Number, default: 0, select: false },
+    verifyLastSent: { type: Date, default: null, select: false },
+    resetTokenHash: { type: String, default: null, select: false },
+    resetTokenExpires: { type: Date, default: null, select: false },
   },
   { timestamps: true }
 );

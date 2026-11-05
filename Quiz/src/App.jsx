@@ -22,6 +22,10 @@ import Membership from "./pages/Membership";
 import Legal from "./pages/Legal";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
+import AdminBulkUpload from "./pages/AdminBulkUpload";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
+import VerifyEmail from "./pages/VerifyEmail";
 function App() {
   return (
     <Layout>
@@ -49,8 +53,12 @@ function App() {
         <Route path="/refund-policy" element={<Legal kind="refund" />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="*" element={<NotFound />} />
+        <Route path="/admin/questions/bulk" element={<AdminRoute><AdminBulkUpload /></AdminRoute>} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+       <Route path="/reset-password/:token" element={<ResetPassword />} />
+       <Route path="/verify-email" element={<VerifyEmail />} />
       </Routes>
-    </Layout>
+      </Layout>
   );
 }
 

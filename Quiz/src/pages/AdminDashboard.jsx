@@ -12,7 +12,7 @@ function AdminDashboard() {
         <Link to="/admin/exams" style={{ color: "inherit" }}>
           <div className="exam-card">
             <h3>Manage Exams</h3>
-            <p>Naye exam add karna aur delete karna</p>
+            <p>Exam add, edit aur delete karna</p>
           </div>
         </Link>
 
@@ -20,6 +20,13 @@ function AdminDashboard() {
           <div className="exam-card">
             <h3>Manage Questions</h3>
             <p>Questions add karna aur delete karna</p>
+          </div>
+        </Link>
+
+        <Link to="/admin/questions/bulk" style={{ color: "inherit" }}>
+          <div className="exam-card">
+            <h3>Bulk Upload</h3>
+            <p>CSV file se ek saath bahut saare questions</p>
           </div>
         </Link>
 

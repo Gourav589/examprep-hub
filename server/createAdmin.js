@@ -18,10 +18,18 @@ const run = async () => {
   if (user) {
     user.role = "admin";
     user.password = hashed;
+    user.name = name;
+    user.emailVerified = true;
     await user.save();
-    console.log(`Admin updated (password changed): ${user.email}`);
+    console.log(`Admin updated: ${user.email}`);
   } else {
-    user = await User.create({ name, email, password: hashed, role: "admin" });
+    user = await User.create({
+      name,
+      email,
+      password: hashed,
+      role: "admin",
+      emailVerified: true,
+    });
     console.log(`Admin created: ${user.email}`);
   }
 

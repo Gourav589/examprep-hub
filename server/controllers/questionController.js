@@ -216,3 +216,71 @@ exports.deleteQuestion = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+exports.bulkCreateQuestions = async (req, res) => {
+  try {
+    const { exam, defaultTest, questions } = req.body;
+
+    if (!mongoose.Types.ObjectId.isValid(exam)) {
+      return res.status(400).json({ message: "Invalid exam id" });
+    }
+    const examDoc = await Exam.findById(exam);
+    if (!examDoc) {
+      return res.status(404).json({ message: "Exam not found" });
+    }
+    if (!Array.isArray(questions) || questions.length === 0) {
+      return res.status(400).json({ message: "Koi question nahi mila" });
+    }
+    if (questions.length > 500) {
+      return res.status(400).json({ message: "Ek baar mein maximum 500 questions" });
+    }
+
+    const defTest = Math.max(1, Number(defaultTest) || 1);
+    const good = [];
+    const failed = [];
+
+    questions.forEach((row, i) => {
+      const line = i + 2; // header ke baad pehli row = line 2
+      const text = String(row.question ?? "").trim();
+      const options = [row.option1, row.option2, row.option3, row.option4].map((o) =>
+        String(o ?? "").trim()
+      );
+      const correct = Number(row.correct);
+      const rawTest = String(row.testNumber ?? "").trim();
+      const test = rawTest === "" ? defTest : Number(rawTest);
+
+      if (!text) return failed.push({ line, reason: "Question khaali hai" });
+      if (text.length > 1000) return failed.push({ line, reason: "Question bahut lamba hai" });
+      if (options.some((o) => !o)) return failed.push({ line, reason: "Chaaron options zaroori hain" });
+      if (options.some((o) => o.length > 300)) return failed.push({ line, reason: "Koi option bahut lamba hai" });
+      if (![1, 2, 3, 4].includes(correct)) return failed.push({ line, reason: "correct 1 se 4 ke beech hona chahiye" });
+      if (!Number.isInteger(test) || test < 1 || test > 1000) {
+        return failed.push({ line, reason: "testNumber sahi nahi hai" });
+      }
+
+      good.push({
+        exam,
+        testNumber: test,
+        section: String(row.section ?? "").trim().slice(0, 60) || "General",
+        question: text,
+        options,
+        correctIndex: correct - 1,
+      });
+    });
+
+    if (good.length > 0) {
+      await Question.insertMany(good);
+
+      // Card par "kitne tests" kam na dikhe, isliye sirf badhate hain
+      const distinct = await Question.distinct("testNumber", { exam });
+      if (distinct.length > examDoc.tests) {
+        examDoc.tests = distinct.length;
+        await examDoc.save();
+      }
+    }
+
+    res.json({ added: good.length, failed });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};

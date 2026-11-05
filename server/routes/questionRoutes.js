@@ -5,6 +5,7 @@ const {
   submitTest,
   getQuestionsForAdmin,
   createQuestion,
+  bulkCreateQuestions,
   deleteQuestion,
 } = require("../controllers/questionController");
 const protect = require("../middleware/authMiddleware");
@@ -18,6 +19,7 @@ router.get("/exam/:examId", optionalAuth, getQuestionsByExam);
 router.post("/exam/:examId/submit", protect, submitTest);
 
 router.get("/admin/exam/:examId", protect, adminOnly, getQuestionsForAdmin);
+router.post("/bulk", protect, adminOnly, bulkCreateQuestions);
 router.post("/", protect, adminOnly, createQuestion);
 router.delete("/:id", protect, adminOnly, deleteQuestion);
 

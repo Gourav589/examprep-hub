@@ -1,0 +1,211 @@
+/* Phone aur chhoti screen ke liye sudhaar */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+html,
+body {
+  overflow-x: hidden;
+}
+
+/* iPhone par input par zoom na ho, isliye 16px */
+input,
+select,
+textarea {
+  font-size: 16px;
+}
+
+@media (max-width: 700px) {
+  .section {
+    margin: 26px auto;
+    padding: 0 14px;
+  }
+
+  .section h1 {
+    font-size: 26px;
+  }
+
+  .section h2 {
+    font-size: 21px;
+  }
+
+  .card-btn {
+    padding: 11px 20px;
+  }
+
+  /* Navbar */
+  .navbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    padding: 12px 14px;
+  }
+
+  .logo {
+    justify-content: center;
+  }
+
+  .nav-links {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px 14px;
+  }
+
+  .nav-search {
+    width: 100%;
+  }
+
+  .nav-search input {
+    width: 100%;
+  }
+
+  .user-chip {
+    margin: 0 auto;
+  }
+
+  /* Sidebar */
+  .sidebar {
+    width: 82vw;
+    max-width: 300px;
+  }
+
+  /* Home */
+  .hero {
+    padding: 40px 14px 70px;
+  }
+
+  .hero-text h1 {
+    font-size: 28px;
+  }
+
+  .hero-text p {
+    font-size: 16px;
+  }
+
+  .stats-strip {
+    padding: 0 14px;
+    gap: 8px;
+  }
+
+  .stat-box {
+    padding: 12px 6px;
+  }
+
+  .stat-box h2 {
+    font-size: 20px;
+  }
+
+  .stat-box p {
+    font-size: 12px;
+  }
+
+  /* Test page */
+  .tp-wrap {
+    margin: 16px auto;
+    padding: 0 12px;
+  }
+
+  .tp-header {
+    padding: 14px;
+  }
+
+  .tp-question-card,
+  .tp-card {
+    padding: 16px;
+  }
+
+  .tp-question {
+    font-size: 18px;
+  }
+
+  .tp-option {
+    padding: 12px;
+    font-size: 15px;
+  }
+
+  .tp-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .tp-btn.primary {
+    grid-column: 1 / -1;
+    margin-left: 0;
+  }
+
+  .tp-palette {
+    grid-template-columns: repeat(6, 1fr);
+  }
+
+  /* Result page */
+  .rs-wrap {
+    margin: 16px auto;
+    padding: 0 12px;
+  }
+
+  .rs-hero {
+    padding: 20px;
+  }
+
+  .rs-hero h1 {
+    font-size: 26px;
+  }
+
+  .rs-donut {
+    width: 150px;
+    height: 150px;
+  }
+
+  .rs-donut svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .rs-stat {
+    min-width: 70px;
+    padding: 8px 12px;
+  }
+
+  /* Login, Signup, Verify */
+  .au-page {
+    padding: 20px 12px;
+  }
+
+  .au-form {
+    padding: 24px 20px;
+  }
+
+  .au-side {
+    padding: 20px;
+  }
+
+  /* Membership */
+  .mb-card {
+    padding: 22px;
+  }
+
+  .mb-price {
+    font-size: 36px;
+  }
+
+  /* Analytics: charts screen se bahar na nikalein */
+  .an-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .an-stats {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  /* Legal pages */
+  .lg-wrap {
+    margin: 16px 12px;
+    padding: 20px;
+  }
+
+  /* Footer */
+  .footer-inner {
+    flex-direction: column;
+  }
+}

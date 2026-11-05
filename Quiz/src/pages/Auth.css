@@ -198,3 +198,12 @@
 .au-terms a {
   color: #2563eb;
 }
+
+.au-ok {
+  background: #d1fae5;
+  color: #047857;
+  padding: 10px 12px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 14px;
+}

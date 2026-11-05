@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import API from "../services/api";
-import "./Auth.css";
 import useSeo from "../hooks/useSeo";
+import "./Auth.css";
+
 function Signup() {
   useSeo("Create Free Account | ExamPrep Hub", "Sign up free and start practicing govt exam mock tests today.");
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -18,9 +20,7 @@ function Signup() {
     setLoading(true);
     try {
       const { data } = await API.post("/auth/signup", { name, email, password });
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user));
-      navigate("/");
+      navigate("/verify-email", { state: { email: data.email || email } });
     } catch (err) {
       setError(err.response?.data?.message || err.message);
       setLoading(false);
@@ -42,7 +42,7 @@ function Signup() {
 
         <div className="au-form">
           <h2>Create Account</h2>
-    
+          <p className="au-sub">Sirf 1 minute mein shuru karo.</p>
 
           {error && <div className="au-error">{error}</div>}
 
@@ -50,7 +50,7 @@ function Signup() {
             <label>Full Name</label>
             <input
               type="text"
-              placeholder="Enter Your Name"
+              placeholder="Aapka naam"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
@@ -59,16 +59,16 @@ function Signup() {
             <label>Email</label>
             <input
               type="email"
-              placeholder="Enter Your Email"
+              placeholder="you@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
             />
 
-            <label>Password</label>
+            <label>Password (kam se kam 8 akshar)</label>
             <input
               type="password"
-              placeholder=" password"
+              placeholder="Mazboot password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -77,14 +77,15 @@ function Signup() {
             <button type="submit" className="au-btn" disabled={loading}>
               {loading ? "Please wait..." : "Sign Up"}
             </button>
-            <p className="au-terms">
-  Sign up karke aap hamari <Link to="/terms">Terms</Link> aur{" "}
-  <Link to="/privacy">Privacy Policy</Link> se sehmat hote ho.
-</p>
           </form>
 
+          <p className="au-terms">
+            Sign up karke aap hamari <Link to="/terms">Terms</Link> aur{" "}
+            <Link to="/privacy">Privacy Policy</Link> se sehmat hote ho.
+          </p>
+
           <p className="au-switch">
-            <Link to="/login">Login</Link>
+            Pehle se account hai? <Link to="/login">Login</Link>
           </p>
         </div>
       </div>
