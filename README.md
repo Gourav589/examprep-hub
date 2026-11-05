@@ -1,20 +1,38 @@
 # ExamPrep Hub
 
-A full-stack mock test platform for govt exam preparation (SSC, Banking, Railway, State Govt). Students practice timed mock tests, get instant results and analytics, and unlock premium exams with a monthly membership. Admins manage everything from a separate panel.
+A full-stack mock test platform for govt exam preparation (SSC, Banking, Railway, State Govt). Students practice timed tests, get instant results and Python-powered analytics, and unlock premium exams with a monthly membership. Admins manage exams, questions, students and job alerts from a separate panel.
+
+## Screenshots
+
+| Home | Test Page |
+|---|---|
+| ![Home](docs/screenshots/home.png) | ![Test](docs/screenshots/test.png) |
+
+| Result | Admin Panel |
+|---|---|
+| ![Result](docs/screenshots/result.png) | ![Admin](docs/screenshots/admin.png) |
+
+| Analytics |
+|---|
+| ![Analytics](docs/screenshots/analytics.png) |
 
 ## Features
 
 **Student**
-- Signup and login with JWT authentication
-- Mock tests with a circular timer, question palette, mark for review and auto-submit
+- Signup with email verification (6-digit code) and login with JWT
+- Forgot password with a one-time reset link (30 minutes)
+- Several tests per exam, each with its own timer and optional negative marking
+- Test page with circular timer, question palette, mark for review and auto-submit
 - Server-side scoring, result page with donut chart and section-wise performance
-- Result history, leaderboard with rank, and a Your Progress dashboard
-- Python-powered analytics: percentile, section-wise comparison and score trend charts
+- Result history, leaderboard with rank, and a progress dashboard
+- Python analytics: percentile, section-wise comparison and score trend charts
 - Premium exams with a Rs 200 monthly membership (Razorpay, test mode) and a confirmation email
-- Latest govt job alerts, profile page with change password
+- Govt job alerts, profile page with change password
+- Responsive layout for phones, SEO-friendly page titles, and legal pages (Terms, Privacy, Refund, Contact)
 
 **Admin**
-- Role-based admin panel: manage exams, questions, students and job alerts
+- Role-based admin panel: manage exams (add, edit, delete), questions, students and job alerts
+- Bulk question upload from a CSV file, with line-by-line error reports
 - Make or remove premium access for a student
 
 ## Tech Stack
@@ -25,7 +43,7 @@ A full-stack mock test platform for govt exam preparation (SSC, Banking, Railway
 | Backend | Node.js, Express |
 | Database | MongoDB with Mongoose |
 | Analytics service | Python, FastAPI, Pandas, NumPy, Matplotlib, Seaborn |
-| Auth and security | JWT, bcrypt, role-based access, signature-verified payments |
+| Auth and security | JWT, bcrypt, role-based access, helmet, rate limiting, input validation |
 | Payments and email | Razorpay, Nodemailer (Gmail) |
 
 ## Architecture
@@ -80,6 +98,8 @@ node seed.js
 node seedQuestions.js
 ```
 
+Accounts created before email verification was added can be marked verified once with `node markVerified.js`.
+
 ## Environment Variables
 
 `server/.env`
@@ -87,6 +107,7 @@ node seedQuestions.js
 PORT=5000
 MONGO_URI=mongodb://127.0.0.1:27017/examprep
 JWT_SECRET=your-long-random-secret
+CLIENT_URL=http://localhost:5173
 ANALYTICS_URL=http://127.0.0.1:8000
 ANALYTICS_KEY=shared-secret-with-analytics
 RAZORPAY_KEY_ID=rzp_test_xxxxx
@@ -101,32 +122,25 @@ MONGO_URI=mongodb://127.0.0.1:27017/examprep
 ANALYTICS_KEY=shared-secret-with-server
 ```
 
+Optional for the frontend: `VITE_API_URL` (defaults to `http://localhost:5000/api`).
+
 Never commit real keys. Razorpay runs in test mode, so no real money is charged.
 
 ## Security Notes
 
-- Passwords are hashed with bcrypt, and sessions use signed JWTs
+- Passwords are hashed with bcrypt. Sessions use signed JWTs
 - Admin role cannot be set through signup. Admin routes are protected on the server by middleware, not only in the UI
 - Correct answers are never sent to the browser. Scores are calculated on the server
 - Payment amount is fixed on the server, and the Razorpay signature is verified (HMAC-SHA256) before premium is granted
-- The analytics service only accepts requests with a shared secret key
-
-## Screenshots
-
-| Home | Test Page |
-|---|---|
-| ![Home](docs/screenshots/home.png) | ![Test](docs/screenshots/test.png) |
-
-| Result | Admin Panel |
-|---|---|
-| ![Result](docs/screenshots/result.png) | ![Admin](docs/screenshots/admin.png) |
+- Email verification codes and password reset tokens are stored only as hashes, and they expire and are limited in attempts
+- `helmet` security headers, rate limits on login, signup, reset and payment routes, and type-checked inputs against NoSQL injection
+- The analytics service accepts only requests that carry a shared secret key
 
 ## Roadmap
 
-- Deploy (MongoDB Atlas, Render, static hosting)
-- Email verification and forgot password
+- Deploy (MongoDB Atlas, hosting, custom domain)
 - Razorpay live mode and webhooks
-- Pagination, rate limiting and automated tests
+- Pagination and automated tests
 
 ## Author
 
