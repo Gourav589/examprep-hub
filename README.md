@@ -6,7 +6,7 @@ A full-stack mock test platform for govt exam preparation (SSC, Banking, Railway
 
 | Home | Test Page |
 |---|---|
-| ![Home](docs/screenshots/home.png) | ![Test](docs/screenshots/Test.png.png) |
+| ![Home](docs/screenshots/home.png) | ![Test](docs/screenshots/test.png) |
 
 | Result | Admin Panel |
 |---|---|
