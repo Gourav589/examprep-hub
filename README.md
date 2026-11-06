@@ -10,7 +10,7 @@ A full-stack mock test platform for govt exam preparation (SSC, Banking, Railway
 
 | Result | Admin Panel |
 |---|---|
-| ![Result](docs/screenshots/result.png) | ![Admin](docs/screenshots/Admin.png) |
+| ![Result](docs/screenshots/Result.png) | ![Admin](docs/screenshots/Admin.png) |
 
 | Analytics |
 |---|
