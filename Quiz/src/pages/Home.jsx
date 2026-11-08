@@ -163,12 +163,12 @@ function Home() {
       <section className="section">
         <h2>Popular Exams</h2>
         <div className="exam-grid">
-          {exams.slice(0, 6).map((exam) => (
+         {exams.filter((e) => e.tests > 0).slice(0, 6).map((exam) => (
             <ExamCard key={exam._id} exam={exam} />
           ))}
         </div>
         <p style={{ marginTop: "20px" }}>
-          <Link to="/exams" className="card-btn">Saare exams dekho</Link>
+          <Link to="/exams" className="card-btn">More</Link>
         </p>
       </section>
     </>

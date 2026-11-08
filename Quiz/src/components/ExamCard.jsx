@@ -7,6 +7,10 @@ const icons = {
   Banking: "🏦",
   Railway: "🚆",
   "State Govt": "🏛️",
+  UPSC: "⚖️",
+  Defence: "🎖️",
+  Teaching: "🎓",
+  "HP State": "🏔️",
 };
 
 const colors = {
@@ -14,6 +18,10 @@ const colors = {
   Banking: "#0891b2",
   Railway: "#ea580c",
   "State Govt": "#16a34a",
+  UPSC: "#be123c",
+  Defence: "#475569",
+  Teaching: "#a16207",
+  "HP State": "#0d9488",
 };
 
 function ExamCard({ exam }) {
@@ -21,8 +29,14 @@ function ExamCard({ exam }) {
   const accent = colors[exam.category] || "#4f46e5";
   const icon = icons[exam.category] || "📚";
 
+  const comingSoon = !exam.tests || exam.tests <= 0;
   const canOpen = exam.free || premium;
-  const label = exam.free ? "Start Free" : premium ? "Start Premium" : "Unlock Premium";
+
+  let label = "Start Free";
+  if (comingSoon) label = "Jald aa raha hai";
+  else if (!exam.free) label = premium ? "Start Premium" : "Unlock Premium";
+
+  const target = !comingSoon && !canOpen ? "/membership" : `/exams/${exam._id}`;
 
   return (
     <div
@@ -30,6 +44,7 @@ function ExamCard({ exam }) {
       style={{
         borderTopColor: accent,
         background: `linear-gradient(160deg, ${accent}44 0%, ${accent}1f 100%)`,
+        opacity: comingSoon ? 0.85 : 1,
       }}
     >
       <div className="card-icon" style={{ background: accent + "44" }}>
@@ -39,11 +54,11 @@ function ExamCard({ exam }) {
         {exam.category}
       </span>
       <h3>{exam.name}</h3>
-      <p>{exam.tests} Mock Tests</p>
+      <p>{comingSoon ? "Tests jald aa rahe hain" : `${exam.tests} Mock Tests`}</p>
       <Link
-        to={canOpen ? `/exams/${exam._id}` : "/membership"}
+        to={target}
         className="card-btn"
-        style={{ background: accent }}
+        style={{ background: comingSoon ? "#64748b" : accent }}
       >
         {label}
       </Link>
