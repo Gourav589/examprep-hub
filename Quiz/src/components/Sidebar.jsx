@@ -9,6 +9,7 @@ function Sidebar({ open, onClose }) {
     { to: "/", label: "Home", icon: "🏠", end: true },
     { to: "/exams", label: "All Tests", icon: "📝" },
     { to: "/jobs", label: "Job Alerts", icon: "📢" },
+    { to: "/reviews", label: "Reviews", icon: "⭐" },
   ];
 
   if (user && user.role === "admin") {

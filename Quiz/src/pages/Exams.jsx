@@ -14,12 +14,13 @@ function Exams() {
   const [params] = useSearchParams();
   const [exams, setExams] = useState([]);
   const [search, setSearch] = useState(params.get("search") || "");
-  const [category, setCategory] = useState("All");
+  const [category, setCategory] = useState(params.get("category") || "All");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     setSearch(params.get("search") || "");
+    setCategory(params.get("category") || "All");
   }, [params]);
 
   useEffect(() => {
@@ -30,11 +31,12 @@ function Exams() {
   }, []);
 
   const categories = ["All", ...new Set(exams.map((e) => e.category))];
+  const activeCategory = categories.includes(category) ? category : "All";
 
   const filtered = exams
     .filter(
       (e) =>
-        (category === "All" || e.category === category) &&
+        (activeCategory === "All" || e.category === activeCategory) &&
         e.name.toLowerCase().includes(search.trim().toLowerCase())
     )
     // Jin exams ke tests bane hain, wo pehle dikhein
@@ -62,7 +64,7 @@ function Exams() {
         {categories.map((c) => (
           <button
             key={c}
-            className={`category-btn ${category === c ? "active" : ""}`}
+            className={`category-btn ${activeCategory === c ? "active" : ""}`}
             onClick={() => setCategory(c)}
           >
             {c}

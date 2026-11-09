@@ -26,6 +26,7 @@ import AdminBulkUpload from "./pages/AdminBulkUpload";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import VerifyEmail from "./pages/VerifyEmail";
+import Reviews from "./pages/Reviews";
 function App() {
   return (
     <Layout>
@@ -57,6 +58,7 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
        <Route path="/reset-password/:token" element={<ResetPassword />} />
        <Route path="/verify-email" element={<VerifyEmail />} />
+       <Route path="/reviews" element={<Reviews />} />
       </Routes>
       </Layout>
   );
