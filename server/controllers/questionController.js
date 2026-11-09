@@ -7,14 +7,17 @@ const User = require("../models/User");
 const isPremiumActive = (user) =>
   user.isPremium && (!user.premiumUntil || user.premiumUntil > new Date());
 
-// Premium exam ko kaun khol sakta hai, yeh check karta hai
-const canAccess = async (examId, userId) => {
+// Kaun is exam ka kaunsa test khol sakta hai
+const canAccess = async (examId, userId, testNumber) => {
   const exam = await Exam.findById(examId);
   if (!exam) return { ok: false, status: 404, message: "Exam not found" };
-  if (exam.free) return { ok: true };
+
+  // Pehle 'freeTests' tests sabke liye free (purane exams mein default 1)
+  const freeTests = typeof exam.freeTests === "number" ? exam.freeTests : 1;
+  if (testNumber <= freeTests) return { ok: true };
 
   if (!userId) {
-    return { ok: false, status: 401, message: "Please login to access premium exams" };
+    return { ok: false, status: 401, message: "Please login to access premium tests" };
   }
 
   const user = await User.findById(userId);
@@ -52,7 +55,7 @@ exports.getQuestionsByExam = async (req, res) => {
       return res.status(400).json({ message: "Invalid exam id" });
     }
 
-    const access = await canAccess(examId, req.userId);
+    const access = await canAccess(examId, req.userId, testNumber);
     if (!access.ok) {
       return res.status(access.status).json({ message: access.message });
     }
@@ -76,7 +79,7 @@ exports.submitTest = async (req, res) => {
       return res.status(400).json({ message: "Invalid exam id" });
     }
 
-    const access = await canAccess(examId, req.userId);
+    const access = await canAccess(examId, req.userId, testNumber);
     if (!access.ok) {
       return res.status(access.status).json({ message: access.message });
     }
@@ -118,7 +121,6 @@ exports.submitTest = async (req, res) => {
       };
     });
 
-    // Marks = sahi jawab minus galat jawab ka negative marking (0 se neeche nahi)
     const marks = Math.max(0, Math.round((correct - wrong * negativeMarking) * 100) / 100);
 
     await Attempt.create({
@@ -202,21 +204,6 @@ exports.createQuestion = async (req, res) => {
   }
 };
 
-exports.deleteQuestion = async (req, res) => {
-  try {
-    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-      return res.status(400).json({ message: "Invalid question id" });
-    }
-    const deleted = await Question.findByIdAndDelete(req.params.id);
-    if (!deleted) {
-      return res.status(404).json({ message: "Question not found" });
-    }
-    res.json({ message: "Question deleted" });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
 exports.bulkCreateQuestions = async (req, res) => {
   try {
     const { exam, defaultTest, questions } = req.body;
@@ -240,7 +227,7 @@ exports.bulkCreateQuestions = async (req, res) => {
     const failed = [];
 
     questions.forEach((row, i) => {
-      const line = i + 2; // header ke baad pehli row = line 2
+      const line = i + 2;
       const text = String(row.question ?? "").trim();
       const options = [row.option1, row.option2, row.option3, row.option4].map((o) =>
         String(o ?? "").trim()
@@ -271,7 +258,6 @@ exports.bulkCreateQuestions = async (req, res) => {
     if (good.length > 0) {
       await Question.insertMany(good);
 
-      // Card par "kitne tests" kam na dikhe, isliye sirf badhate hain
       const distinct = await Question.distinct("testNumber", { exam });
       if (distinct.length > examDoc.tests) {
         examDoc.tests = distinct.length;
@@ -280,6 +266,21 @@ exports.bulkCreateQuestions = async (req, res) => {
     }
 
     res.json({ added: good.length, failed });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+exports.deleteQuestion = async (req, res) => {
+  try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({ message: "Invalid question id" });
+    }
+    const deleted = await Question.findByIdAndDelete(req.params.id);
+    if (!deleted) {
+      return res.status(404).json({ message: "Question not found" });
+    }
+    res.json({ message: "Question deleted" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

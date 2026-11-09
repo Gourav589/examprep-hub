@@ -2,10 +2,12 @@ import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import API from "../services/api";
 import useSeo from "../hooks/useSeo";
+import usePremium from "../hooks/usePremium";
 import "./ExamDetail.css";
 
 function ExamDetail() {
   const { id } = useParams();
+  const premium = usePremium();
   const [exam, setExam] = useState(null);
   const [tests, setTests] = useState([]);
   const [error, setError] = useState("");
@@ -36,13 +38,18 @@ function ExamDetail() {
 
   const minutes = exam.durationMinutes || 10;
   const neg = exam.negativeMarking || 0;
+  const freeTests = typeof exam.freeTests === "number" ? exam.freeTests : 1;
+
+  let planText = "Saare tests premium";
+  if (freeTests === 1) planText = "Test 1 free, baaki premium";
+  else if (freeTests > 1) planText = `Pehle ${freeTests} tests free, baaki premium`;
 
   return (
     <div className="section">
       <span className="badge">{exam.category}</span>
       <h1>{exam.name}</h1>
       <p className="ed-sub">
-        {exam.free ? "Free for everyone" : "Premium members only"} | {minutes} minute har test | Negative marking:{" "}
+        {planText} | {minutes} minute har test | Negative marking:{" "}
         {neg > 0 ? `${neg} per galat jawab` : "nahi hai"}
       </p>
 
@@ -53,6 +60,11 @@ function ExamDetail() {
         <Link to="/exams" className="card-btn" style={{ background: "#64748b" }}>
           Saare exams
         </Link>
+        {!premium && tests.length > freeTests && (
+          <Link to="/membership" className="card-btn" style={{ background: "#7c3aed" }}>
+            Premium unlock karo
+          </Link>
+        )}
       </div>
 
       <h2 style={{ margin: "26px 0 14px" }}>Available Tests</h2>
@@ -62,25 +74,30 @@ function ExamDetail() {
       )}
 
       <div className="ed-grid">
-        {tests.map((t) => (
-          <div key={t.testNumber} className="ed-test">
-            <div className="ed-test-top">
-              <h3>Test {t.testNumber}</h3>
-              <span className={"ed-tag " + (exam.free ? "free" : "premium")}>
-                {exam.free ? "Free" : "Premium"}
-              </span>
+        {tests.map((t) => {
+          const isFree = t.testNumber <= freeTests;
+          const canOpen = isFree || premium;
+
+          return (
+            <div key={t.testNumber} className="ed-test">
+              <div className="ed-test-top">
+                <h3>Test {t.testNumber}</h3>
+                <span className={"ed-tag " + (isFree ? "free" : "premium")}>
+                  {isFree ? "Free" : "Premium"}
+                </span>
+              </div>
+              <p>{t.questions} questions</p>
+              <p>{minutes} minute</p>
+              <Link
+                to={canOpen ? `/exams/${id}/test?test=${t.testNumber}` : "/membership"}
+                className="card-btn"
+                style={{ marginTop: "12px", background: canOpen ? undefined : "#7c3aed" }}
+              >
+                {isFree ? "Start Free Test" : premium ? "Start Test" : "Unlock with Premium"}
+              </Link>
             </div>
-            <p>{t.questions} questions</p>
-            <p>{minutes} minute</p>
-            <Link
-              to={`/exams/${id}/test?test=${t.testNumber}`}
-              className="card-btn"
-              style={{ marginTop: "12px" }}
-            >
-              Start Test
-            </Link>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

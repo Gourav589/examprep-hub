@@ -6,7 +6,7 @@ const emptyForm = {
   name: "",
   category: "",
   tests: 0,
-  free: true,
+  freeTests: 1,
   durationMinutes: 10,
   negativeMarking: 0,
 };
@@ -28,8 +28,7 @@ function AdminExams() {
   }, []);
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setForm({ ...form, [name]: type === "checkbox" ? checked : value });
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
@@ -57,7 +56,7 @@ function AdminExams() {
       name: exam.name,
       category: exam.category,
       tests: exam.tests,
-      free: exam.free,
+      freeTests: typeof exam.freeTests === "number" ? exam.freeTests : 1,
       durationMinutes: exam.durationMinutes || 10,
       negativeMarking: exam.negativeMarking || 0,
     });
@@ -112,6 +111,17 @@ function AdminExams() {
             value={form.tests}
             onChange={handleChange}
           />
+          <label style={{ display: "block", fontWeight: 600, marginBottom: "6px" }}>
+            Pehle kitne tests free (baaki premium)
+          </label>
+          <input
+            name="freeTests"
+            type="number"
+            min="0"
+            max="100"
+            value={form.freeTests}
+            onChange={handleChange}
+          />
           <input
             name="durationMinutes"
             type="number"
@@ -133,16 +143,6 @@ function AdminExams() {
             <option value={0.5}>0.5 per galat jawab</option>
             <option value={1}>1 per galat jawab</option>
           </select>
-          <label style={{ display: "block", marginBottom: "15px" }}>
-            <input
-              name="free"
-              type="checkbox"
-              checked={form.free}
-              onChange={handleChange}
-              style={{ width: "auto", marginRight: "8px" }}
-            />
-            Free exam
-          </label>
           <button type="submit">{editingId ? "Save Changes" : "Add Exam"}</button>
           {editingId && (
             <button
@@ -173,7 +173,8 @@ function AdminExams() {
           <div>
             <h3>{exam.name}</h3>
             <p>
-              {exam.category} | {exam.tests} tests | {exam.free ? "Free" : "Premium"} |{" "}
+              {exam.category} | {exam.tests} tests |{" "}
+              {typeof exam.freeTests === "number" ? exam.freeTests : 1} free |{" "}
               {exam.durationMinutes || 10} min |{" "}
               {exam.negativeMarking ? `-${exam.negativeMarking} negative` : "no negative"}
             </p>

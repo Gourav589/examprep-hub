@@ -134,7 +134,7 @@ function Membership() {
         </div>
 
         <ul className="mb-list">
-          <li>✔ Saare premium exams (IBPS PO, SBI Clerk aur aur bhi)</li>
+          <li>✔ Har exam ke saare tests (Test 2 aur aage ke sab)</li>
           <li>✔ Section-wise result aur analytics</li>
           <li>✔ Leaderboard aur rank</li>
           <li>✔ Kabhi bhi cancel, auto-renew nahi</li>
