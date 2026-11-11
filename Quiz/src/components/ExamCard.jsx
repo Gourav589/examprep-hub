@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import usePremium from "../hooks/usePremium";
 import "./ExamCard.css";
 
 const icons = {
@@ -11,6 +10,7 @@ const icons = {
   Defence: "🎖️",
   Teaching: "🎓",
   "HP State": "🏔️",
+  Computer: "💻",
 };
 
 const colors = {
@@ -22,21 +22,44 @@ const colors = {
   Defence: "#475569",
   Teaching: "#a16207",
   "HP State": "#0d9488",
+  Computer: "#0284c7",
 };
 
+// Computer ke topic ke hisaab se icon (javascript ko java se pehle rakha hai)
+const topicIcons = [
+  ["javascript", "🟨"],
+  ["java", "☕"],
+  ["c++", "⚙️"],
+  ["c programming", "🔧"],
+  ["python", "🐍"],
+  ["html", "🌐"],
+  ["sql", "🗄️"],
+  ["excel", "📊"],
+  ["powerpoint", "📽️"],
+  ["word", "📄"],
+  ["internet", "📧"],
+  ["network", "🔌"],
+  ["operating", "🖥️"],
+  ["data structures", "🧩"],
+  ["awareness", "🧠"],
+  ["ccc", "🎓"],
+];
+
+function pickIcon(exam) {
+  if (exam.category === "Computer") {
+    const name = exam.name.toLowerCase();
+    const hit = topicIcons.find(([key]) => name.includes(key));
+    if (hit) return hit[1];
+  }
+  return icons[exam.category] || "📚";
+}
+
 function ExamCard({ exam }) {
-  const premium = usePremium();
   const accent = colors[exam.category] || "#4f46e5";
-  const icon = icons[exam.category] || "📚";
+  const icon = pickIcon(exam);
 
   const comingSoon = !exam.tests || exam.tests <= 0;
-  const canOpen = exam.free || premium;
-
-  let label = "Start Free";
-  if (comingSoon) label = "Jald aa raha hai";
-  else if (!exam.free) label = premium ? "Start Premium" : "Unlock Premium";
-
-  const target = !comingSoon && !canOpen ? "/membership" : `/exams/${exam._id}`;
+  const freeTests = typeof exam.freeTests === "number" ? exam.freeTests : 1;
 
   return (
     <div
@@ -54,13 +77,17 @@ function ExamCard({ exam }) {
         {exam.category}
       </span>
       <h3>{exam.name}</h3>
-      <p>{comingSoon ? "Tests jald aa rahe hain" : `${exam.tests} Mock Tests`}</p>
+      <p>
+        {comingSoon
+          ? "Tests jald aa rahe hain"
+          : `${exam.tests} Mock Tests${freeTests > 0 ? ` | ${freeTests === 1 ? "Test 1 free" : `${freeTests} free`}` : ""}`}
+      </p>
       <Link
-        to={target}
+        to={`/exams/${exam._id}`}
         className="card-btn"
         style={{ background: comingSoon ? "#64748b" : accent }}
       >
-        {label}
+        {comingSoon ? "Jald aa raha hai" : "Tests dekho"}
       </Link>
     </div>
   );

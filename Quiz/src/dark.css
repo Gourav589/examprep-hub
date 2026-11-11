@@ -1,0 +1,254 @@
+/* Dark mode: sirf tab lagta hai jab <html data-theme="dark"> ho.
+   :where() se specificity zero rehti hai, isliye hari/laal jaise
+   state wale rang (answered, marked, selected) bache rehte hain. */
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --d-surface: #000000;
+  --d-surface2: #1b2744;
+  --d-border: #2a3a5e;
+  --d-text: #e2e8f0;
+  --d-muted: #a8b6d3;
+  --d-head: #f1f5f9;
+  --d-link: #8ab4ff;
+}
+
+/* Poora page */
+:where([data-theme="dark"]) body {
+  background: linear-gradient(160deg, #0a1020 0%, #0f182e 55%, #150f2b 100%);
+  background-attachment: fixed;
+  color: var(--d-text);
+}
+
+:where([data-theme="dark"]) :is(h1, h2, h3, h4) {
+  color: var(--d-head);
+}
+
+:where([data-theme="dark"]) .section p {
+  color: var(--d-muted);
+}
+
+/* Safed cards ki jagah dark surface */
+:where([data-theme="dark"]) :is(
+    .stat-box,
+    .progress-card,
+    .cs-chip,
+    .tp-header,
+    .tp-question-card,
+    .tp-card,
+    .rs-card,
+    .mb-card,
+    .pf-card,
+    .lg-wrap,
+    .rv-top,
+    .rv-form-card,
+    .rv-item,
+    .lb-table,
+    .ed-test,
+    .ja-card,
+    .auth-box,
+    .au-card,
+    .lp-card,
+    .lp-right,
+    .an-stat:not(.highlight),
+    .exam-card:not(.category-card)
+  ) {
+  background: var(--d-surface);
+  border-color: var(--d-border);
+}
+
+:where([data-theme="dark"]) :is(.pstat, .step-box, .rs-reco, .tp-option, .tp-letter, .tp-pal) {
+  background: var(--d-surface2);
+  border-color: var(--d-border);
+}
+
+:where([data-theme="dark"]) .tp-option {
+  color: var(--d-text);
+}
+
+:where([data-theme="dark"]) .tp-pal {
+  color: var(--d-text);
+}
+
+:where([data-theme="dark"]) .tp-letter {
+  color: var(--d-text);
+}
+
+/* Cards ke andar ki line aur patti ke track */
+:where([data-theme="dark"]) :is(.recent-row, .lb-row, .rs-review, .ft-col + .ft-col, .lg-links) {
+  border-color: var(--d-border);
+}
+
+:where([data-theme="dark"]) :is(.rs-bar, .tp-progress, .rv-bar, .ring-bg, .pr-bg) {
+  background: var(--d-border);
+}
+
+:where([data-theme="dark"]) :is(.ring-bg, .pr-bg) {
+  background: none;
+  stroke: var(--d-border);
+}
+
+:where([data-theme="dark"]) .lb-row.me {
+  background: #1e2a52;
+}
+
+/* Mukhya text */
+:where([data-theme="dark"]) :is(
+    .tp-question,
+    .tp-exam,
+    .tp-time,
+    .rv-avg,
+    .mb-price,
+    .rs-q,
+    .rs-reco strong,
+    .lb-name,
+    .lb-rank,
+    .pstat strong,
+    .progress-ring-text strong,
+    .an-stat strong,
+    .lp-right h2,
+    .recent-row,
+    .rv-item strong,
+    .cs-group,
+    .pf-card label,
+    .au-form label,
+    .lp-check
+  ) {
+  color: var(--d-head);
+}
+
+/* Halka (muted) text */
+:where([data-theme="dark"]) :is(
+    .lg-section p,
+    .lg-intro,
+    .rv-comment,
+    .ja-line,
+    .ed-test p,
+    .lp-sub,
+    .lp-switch,
+    .mb-list li,
+    .au-sub,
+    .au-switch,
+    .pf-sub,
+    .rv-sub,
+    .lb-sub,
+    .ed-sub,
+    .an-sub,
+    .cs-sub,
+    .tp-sub,
+    .progress-empty,
+    .step-box p,
+    .stat-box p,
+    .pstat small,
+    .progress-ring-text span,
+    .rs-card-head small,
+    .rs-reco small,
+    .rv-note,
+    .rv-counter,
+    .an-note,
+    .mb-note,
+    .rv-date,
+    .tp-timer-label,
+    .lb-attempts
+  ) {
+  color: var(--d-muted);
+}
+
+/* Input, select, textarea */
+:where([data-theme="dark"]) :is(
+    .au-form input,
+    .lp-field input,
+    .pf-card input,
+    .rv-text,
+    .exam-search,
+    .auth-box input,
+    .auth-box select,
+    .nav-search input
+  ) {
+  background: var(--d-surface2);
+  color: var(--d-text);
+  border-color: var(--d-border);
+}
+
+:where([data-theme="dark"]) :is(.au-form input, .lp-field input, .pf-card input):focus {
+  background: var(--d-surface2);
+}
+
+:where([data-theme="dark"]) :is(.lp-field input, .au-form input, .rv-text)::placeholder {
+  color: #7b8bb0;
+}
+
+:where([data-theme="dark"]) .lp-ico,
+:where([data-theme="dark"]) .lp-eye {
+  color: #9db0d8;
+}
+
+:where([data-theme="dark"]) .category-btn {
+  background: var(--d-surface);
+  color: var(--d-text);
+  border-color: var(--d-border);
+}
+
+:where([data-theme="dark"]) .tp-btn.ghost {
+  background: var(--d-surface);
+  color: var(--d-text);
+  border-color: var(--d-border);
+}
+
+:where([data-theme="dark"]) .rv-btn-danger {
+  background: var(--d-surface);
+}
+
+/* Home ke bade hisse */
+:where([data-theme="dark"]) .band {
+  background: linear-gradient(135deg, #14203d, #1a1740);
+}
+
+:where([data-theme="dark"]) .cs-band {
+  background: linear-gradient(135deg, #0e1f3a, #1b1640);
+}
+
+/* Footer */
+:where([data-theme="dark"]) .ft {
+  background: #0d1528;
+  color: var(--d-text);
+}
+
+:where([data-theme="dark"]) :is(.ft-name, .ft h4, .ft h4 svg) {
+  color: var(--d-head);
+}
+
+:where([data-theme="dark"]) .ft-name span {
+  color: var(--d-link);
+}
+
+:where([data-theme="dark"]) :is(
+    .ft-tag,
+    .ft-about,
+    .ft-chev,
+    .ft-contact li,
+    .ft-contact a,
+    .ft-contact li svg,
+    .ft-col:not(.ft-contact) li a
+  ) {
+  color: var(--d-muted);
+}
+
+:where([data-theme="dark"]) .ft-social a {
+  background: var(--d-surface2);
+}
+
+:where([data-theme="dark"]) .ft-cap {
+  opacity: 0.2;
+}
+
+/* Jahan code mein seedha style={{ background: "white" }} likha hai (admin tables aur forms) */
+:where([data-theme="dark"]) [style*="background: white"] {
+  background: var(--d-surface) !important;
+}
+
+:where([data-theme="dark"]) [style*="#e0e7ff"] {
+  background: var(--d-surface2) !important;
+}
+
+/* Analytics ke chart Python se safed background ke saath aate hain, isliye .an-card safed hi rehta hai */

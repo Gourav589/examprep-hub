@@ -277,7 +277,7 @@
 .pstat strong {
   display: block;
   font-size: 18px;
-  color: #0f172a;
+  color: #f5f6f7;
 }
 
 .pstat small {
@@ -305,7 +305,7 @@
 }
 
 .pstat-icon.blue {
-  background: #dbeafe;
+  background: #f7f8fa;
   color: #2563eb;
 }
 
@@ -335,5 +335,68 @@
   .progress-stats,
   .progress-recent {
     width: 100%;
+  }
+}
+
+.cs-band {
+  background: linear-gradient(135deg, #e0f2fe, #ede9fe);
+  padding: 10px 0 40px;
+  margin-top: 40px;
+}
+
+.cs-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+
+.cs-head h2 {
+  margin-bottom: 6px;
+}
+
+.cs-sub {
+  color: #475569;
+  max-width: 560px;
+  line-height: 1.5;
+}
+
+.cs-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.cs-chip {
+  padding: 9px 16px;
+  background: white;
+  color: #0f2147;
+  border-radius: 24px;
+  font-weight: 600;
+  font-size: 14px;
+  box-shadow: 0 3px 10px rgba(15, 23, 42, 0.1);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.cs-chip:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(15, 23, 42, 0.15);
+}
+
+.cs-group-box {
+  margin-top: 28px;
+}
+
+.cs-group {
+  margin-bottom: 14px;
+  color: #0f2147;
+}
+
+@media (max-width: 700px) {
+  .cs-head {
+    align-items: flex-start;
   }
 }

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import ThemeToggle from "./ThemeToggle";
 import "./Navbar.css";
 
 function Navbar({ onMenuClick }) {
@@ -30,11 +31,13 @@ function Navbar({ onMenuClick }) {
 
         <form className="nav-search" onSubmit={handleSearch}>
           <input
-            placeholder=" search Box"
+            placeholder="Exam search karo..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />
         </form>
+
+        <ThemeToggle />
 
         {user ? (
           <button className="user-chip" onClick={onMenuClick}>

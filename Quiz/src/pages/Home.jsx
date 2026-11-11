@@ -2,16 +2,55 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import ExamCard from "../components/ExamCard";
 import API from "../services/api";
-import "./Home.css";
 import useSeo from "../hooks/useSeo";
+import "./Home.css";
+
 const RADIUS = 38;
 const CIRC = 2 * Math.PI * RADIUS;
 
+const OFFICE_BASICS = [
+  "Computer Fundamentals",
+  "Computer Awareness (Govt Exams)",
+  "MS Word",
+  "MS Excel",
+  "MS PowerPoint",
+  "Internet and Email",
+  "CCC Practice",
+  "Operating System Basics",
+  "Networking Basics",
+];
+
+const PROGRAMMING = [
+  "Python",
+  "C Programming",
+  "C++",
+  "Java",
+  "JavaScript",
+  "HTML and CSS",
+  "SQL and DBMS",
+  "Data Structures",
+];
+
+const CHIPS = [
+  { label: "📄 MS Word", search: "MS Word" },
+  { label: "📊 MS Excel", search: "MS Excel" },
+  { label: "📽️ PowerPoint", search: "PowerPoint" },
+  { label: "🐍 Python", search: "Python" },
+  { label: "⚙️ C++", search: "C++" },
+  { label: "🌐 HTML and CSS", search: "HTML" },
+  { label: "🗄️ SQL", search: "SQL" },
+  { label: "🧠 Computer Awareness", search: "Awareness" },
+];
+
+// Tests wale exams pehle, "jald aa raha hai" wale baad mein
+const readyFirst = (a, b) => (b.tests > 0) - (a.tests > 0);
+
 function Home() {
   useSeo(
-  "Free Govt Exam Mock Tests and Job Alerts | ExamPrep Hub",
-  "Practice free mock tests for SSC, Banking, Railway and State Govt exams. Get instant results and the latest govt job alerts."
-);
+    "Free Govt Exam and Computer Mock Tests | ExamPrep Hub",
+    "Practice free mock tests for SSC, Banking, Railway, HP State exams and computer topics like MS Word, Excel, PowerPoint, Python and C++."
+  );
+
   const [exams, setExams] = useState([]);
   const [attempts, setAttempts] = useState([]);
 
@@ -37,13 +76,30 @@ function Home() {
 
   const totalTests = exams.reduce((sum, e) => sum + (e.tests || 0), 0);
 
+  const govtExams = exams.filter((e) => e.category !== "Computer" && e.tests > 0);
+  const computerExams = exams.filter((e) => e.category === "Computer");
+
+  const groupA = computerExams
+    .filter((e) => OFFICE_BASICS.includes(e.name))
+    .sort(readyFirst);
+  const groupB = computerExams
+    .filter((e) => PROGRAMMING.includes(e.name))
+    .sort(readyFirst);
+  const groupC = computerExams
+    .filter((e) => !OFFICE_BASICS.includes(e.name) && !PROGRAMMING.includes(e.name))
+    .sort(readyFirst);
+
+  const groups = [
+    { title: "📎 MS Office aur Computer Basics", items: groupA },
+    { title: "👨‍💻 Programming aur Web", items: groupB },
+    { title: "➕ Aur computer topics", items: groupC },
+  ];
+
   // Progress ka hisaab
   const testsDone = attempts.length;
   const totalCorrect = attempts.reduce((s, a) => s + (a.correct || 0), 0);
   const totalQuestions = attempts.reduce((s, a) => s + (a.total || 0), 0);
-  const accuracy = totalQuestions
-    ? Math.round((totalCorrect / totalQuestions) * 100)
-    : 0;
+  const accuracy = totalQuestions ? Math.round((totalCorrect / totalQuestions) * 100) : 0;
   const bestPct = attempts.reduce((best, a) => {
     const p = a.total ? Math.round((a.correct / a.total) * 100) : 0;
     return p > best ? p : best;
@@ -82,7 +138,7 @@ function Home() {
         </div>
         <div className="stat-box">
           <h2>Free</h2>
-          <p>Start karo</p>
+          <p>Test 1 har exam ka</p>
         </div>
       </div>
 
@@ -163,14 +219,56 @@ function Home() {
       <section className="section">
         <h2>Popular Exams</h2>
         <div className="exam-grid">
-         {exams.filter((e) => e.tests > 0).slice(0, 6).map((exam) => (
+          {govtExams.slice(0, 6).map((exam) => (
             <ExamCard key={exam._id} exam={exam} />
           ))}
         </div>
         <p style={{ marginTop: "20px" }}>
-          <Link to="/exams" className="card-btn">More</Link>
+          <Link to="/exams" className="card-btn">Saare exams dekho</Link>
         </p>
       </section>
+
+      {computerExams.length > 0 && (
+        <div className="cs-band">
+          <section className="section">
+            <div className="cs-head">
+              <div>
+                <h2>💻 Computer Mock Tests</h2>
+                
+              </div>
+              <Link to="/exams?category=Computer" className="card-btn">
+                More
+              </Link>
+            </div>
+
+            <div className="cs-chips">
+              {CHIPS.map((c) => (
+                <Link
+                  key={c.label}
+                  to={`/exams?search=${encodeURIComponent(c.search)}`}
+                  className="cs-chip"
+                >
+                  {c.label}
+                </Link>
+              ))}
+            </div>
+
+            {groups.map(
+              (g) =>
+                g.items.length > 0 && (
+                  <div key={g.title} className="cs-group-box">
+                    <h3 className="cs-group">{g.title}</h3>
+                    <div className="exam-grid">
+                      {g.items.slice(0, 8).map((exam) => (
+                        <ExamCard key={exam._id} exam={exam} />
+                      ))}
+                    </div>
+                  </div>
+                )
+            )}
+          </section>
+        </div>
+      )}
     </>
   );
 }
