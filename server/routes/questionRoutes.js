@@ -5,6 +5,7 @@ const {
   submitTest,
   getQuestionsForAdmin,
   createQuestion,
+  updateQuestion,
   bulkCreateQuestions,
   deleteQuestion,
 } = require("../controllers/questionController");
@@ -21,6 +22,7 @@ router.post("/exam/:examId/submit", protect, submitTest);
 router.get("/admin/exam/:examId", protect, adminOnly, getQuestionsForAdmin);
 router.post("/bulk", protect, adminOnly, bulkCreateQuestions);
 router.post("/", protect, adminOnly, createQuestion);
+router.put("/:id", protect, adminOnly, updateQuestion);
 router.delete("/:id", protect, adminOnly, deleteQuestion);
 
 module.exports = router;

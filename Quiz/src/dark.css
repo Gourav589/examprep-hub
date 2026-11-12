@@ -252,3 +252,26 @@
 }
 
 /* Analytics ke chart Python se safed background ke saath aate hain, isliye .an-card safed hi rehta hai */
+
+
+:where([data-theme="dark"]) .rs-expl {
+  background: #16264d;
+  color: #c7d7ff;
+}
+
+:where([data-theme="dark"]) .rs-report-form {
+  background: var(--d-surface2);
+  border-color: var(--d-border);
+}
+
+:where([data-theme="dark"]) .rs-report-form :is(select, input) {
+  background: var(--d-surface);
+  color: var(--d-text);
+  border-color: var(--d-border);
+}
+
+:where([data-theme="dark"]) .ar-form :is(input, select, textarea) {
+  background: var(--d-surface2);
+  color: var(--d-text);
+  border-color: var(--d-border);
+}

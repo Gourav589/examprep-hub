@@ -3,6 +3,7 @@ const Question = require("../models/Question");
 const Attempt = require("../models/Attempt");
 const Exam = require("../models/Exam");
 const User = require("../models/User");
+const QuestionReport = require("../models/QuestionReport");
 
 const isPremiumActive = (user) =>
   user.isPremium && (!user.premiumUntil || user.premiumUntil > new Date());
@@ -12,7 +13,6 @@ const canAccess = async (examId, userId, testNumber) => {
   const exam = await Exam.findById(examId);
   if (!exam) return { ok: false, status: 404, message: "Exam not found" };
 
-  // Pehle 'freeTests' tests sabke liye free (purane exams mein default 1)
   const freeTests = typeof exam.freeTests === "number" ? exam.freeTests : 1;
   if (testNumber <= freeTests) return { ok: true };
 
@@ -26,7 +26,6 @@ const canAccess = async (examId, userId, testNumber) => {
   return { ok: false, status: 403, message: "Premium membership required" };
 };
 
-// Ek exam ke kaun-kaun se tests hain
 exports.getTestsForExam = async (req, res) => {
   try {
     const { examId } = req.params;
@@ -60,8 +59,9 @@ exports.getQuestionsByExam = async (req, res) => {
       return res.status(access.status).json({ message: access.message });
     }
 
+    // Sahi jawab aur explanation test ke dauran browser ko nahi bhejte
     const questions = await Question.find({ exam: examId, testNumber }).select(
-      "-correctIndex"
+      "-correctIndex -explanation"
     );
     res.json(questions);
   } catch (error) {
@@ -114,10 +114,12 @@ exports.submitTest = async (req, res) => {
       }
 
       return {
+        questionId: q._id,
         question: q.question,
         options: q.options,
         picked: picked === undefined ? null : picked,
         correctIndex: q.correctIndex,
+        explanation: q.explanation || "",
       };
     });
 
@@ -170,7 +172,7 @@ exports.getQuestionsForAdmin = async (req, res) => {
 
 exports.createQuestion = async (req, res) => {
   try {
-    const { exam, testNumber, section, question, options, correctIndex } = req.body;
+    const { exam, testNumber, section, question, options, correctIndex, explanation } = req.body;
 
     if (!mongoose.Types.ObjectId.isValid(exam)) {
       return res.status(400).json({ message: "Invalid exam id" });
@@ -197,8 +199,79 @@ exports.createQuestion = async (req, res) => {
       question: question.trim(),
       options: options.map((o) => o.trim()),
       correctIndex: correct,
+      explanation: String(explanation ?? "").trim().slice(0, 1000),
     });
     res.status(201).json(created);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+exports.updateQuestion = async (req, res) => {
+  try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({ message: "Invalid question id" });
+    }
+
+    const q = await Question.findById(req.params.id);
+    if (!q) {
+      return res.status(404).json({ message: "Question not found" });
+    }
+
+    const { question, options, correctIndex, section, testNumber, explanation } = req.body;
+
+    if (question !== undefined) {
+      const text = String(question).trim();
+      if (!text || text.length > 1000) {
+        return res.status(400).json({ message: "Question khaali ya bahut lamba hai" });
+      }
+      q.question = text;
+    }
+
+    if (options !== undefined) {
+      if (
+        !Array.isArray(options) ||
+        options.length !== 4 ||
+        options.some((o) => typeof o !== "string" || !o.trim() || o.length > 300)
+      ) {
+        return res.status(400).json({ message: "Chaaron options zaroori hain" });
+      }
+      q.options = options.map((o) => o.trim());
+    }
+
+    if (correctIndex !== undefined) {
+      const c = Number(correctIndex);
+      if (![0, 1, 2, 3].includes(c)) {
+        return res.status(400).json({ message: "Sahi option 1 se 4 ke beech chuno" });
+      }
+      q.correctIndex = c;
+    }
+
+    if (section !== undefined) {
+      q.section = String(section).trim().slice(0, 60) || "General";
+    }
+
+    if (testNumber !== undefined) {
+      const t = Number(testNumber);
+      if (!Number.isInteger(t) || t < 1 || t > 1000) {
+        return res.status(400).json({ message: "testNumber sahi nahi hai" });
+      }
+      q.testNumber = t;
+    }
+
+    if (explanation !== undefined) {
+      q.explanation = String(explanation).trim().slice(0, 1000);
+    }
+
+    await q.save();
+
+    // Question theek ho gaya, to is par aayi open reports band
+    await QuestionReport.updateMany(
+      { question: q._id, status: "open" },
+      { status: "resolved" }
+    );
+
+    res.json(q);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -235,6 +308,7 @@ exports.bulkCreateQuestions = async (req, res) => {
       const correct = Number(row.correct);
       const rawTest = String(row.testNumber ?? "").trim();
       const test = rawTest === "" ? defTest : Number(rawTest);
+      const explanation = String(row.explanation ?? "").trim();
 
       if (!text) return failed.push({ line, reason: "Question khaali hai" });
       if (text.length > 1000) return failed.push({ line, reason: "Question bahut lamba hai" });
@@ -244,6 +318,7 @@ exports.bulkCreateQuestions = async (req, res) => {
       if (!Number.isInteger(test) || test < 1 || test > 1000) {
         return failed.push({ line, reason: "testNumber sahi nahi hai" });
       }
+      if (explanation.length > 1000) return failed.push({ line, reason: "Explanation 1000 akshar se lamba hai" });
 
       good.push({
         exam,
@@ -252,6 +327,7 @@ exports.bulkCreateQuestions = async (req, res) => {
         question: text,
         options,
         correctIndex: correct - 1,
+        explanation,
       });
     });
 

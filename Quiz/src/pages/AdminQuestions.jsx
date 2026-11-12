@@ -8,6 +8,7 @@ const emptyForm = {
   question: "",
   options: ["", "", "", ""],
   correctIndex: 0,
+  explanation: "",
 };
 
 function AdminQuestions() {
@@ -125,6 +126,22 @@ function AdminQuestions() {
             <option value={2}>Correct answer: Option 3</option>
             <option value={3}>Correct answer: Option 4</option>
           </select>
+          <textarea
+            placeholder="Explanation (zaroori nahi): jawab sahi kyun hai, apne shabdon mein"
+            rows={3}
+            maxLength={1000}
+            value={form.explanation}
+            onChange={(e) => setForm({ ...form, explanation: e.target.value })}
+            style={{
+              width: "100%",
+              padding: "12px",
+              marginBottom: "15px",
+              border: "1px solid #d1d5db",
+              borderRadius: "8px",
+              fontSize: "15px",
+              fontFamily: "inherit",
+            }}
+          />
           <button type="submit" disabled={!examId}>Add Question</button>
         </form>
       </div>
@@ -141,6 +158,11 @@ function AdminQuestions() {
               {idx === q.correctIndex ? "✔ " : ""}{opt}
             </p>
           ))}
+          {q.explanation && (
+            <p style={{ marginTop: "8px", color: "#2563eb", fontSize: "14px" }}>
+              Samjho: {q.explanation}
+            </p>
+          )}
           <button
             onClick={() => handleDelete(q._id)}
             style={{

@@ -12,13 +12,13 @@ const HEADERS = [
   "option3",
   "option4",
   "correct",
+  "explanation",
 ];
 const REQUIRED = ["question", "option1", "option2", "option3", "option4", "correct"];
-
 const SAMPLE = [
-  ["1", "Maths", "What is 15% of 200?", "20", "25", "30", "35", "3"],
-  ["1", "English", "Choose the synonym of Rapid.", "Slow", "Quick", "Weak", "Late", "2"],
-  ["2", "Reasoning", "Find the odd one out: 2, 4, 8, 16, 20", "4", "8", "16", "20", "4"],
+  ["1", "Maths", "What is 15% of 200?", "20", "25", "30", "35", "3", "15% of 200 = (15 x 200) / 100 = 30"],
+  ["1", "English", "Choose the synonym of Rapid.", "Slow", "Quick", "Weak", "Late", "2", "Rapid and quick both mean fast"],
+  ["2", "Reasoning", "Find the odd one out: 2, 4, 8, 16, 20", "4", "8", "16", "20", "4", "Baaki sab 2 ki powers hain, 20 nahi"],
 ];
 
 function AdminBulkUpload() {

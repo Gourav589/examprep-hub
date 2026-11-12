@@ -1,13 +1,29 @@
+import { useState } from "react";
 import { useLocation, Link, useParams } from "react-router-dom";
+import API from "../services/api";
 import "./Result.css";
 
 const RADIUS = 60;
 const CIRC = 2 * Math.PI * RADIUS;
 
+const REASONS = [
+  { value: "wrong_answer", label: "Sahi jawab galat hai" },
+  { value: "wrong_question", label: "Question galat ya adhoora hai" },
+  { value: "typo", label: "Spelling ya typing ki galti" },
+  { value: "other", label: "Kuch aur" },
+];
+
 function Result() {
   const { state } = useLocation();
   const { id } = useParams();
   const user = JSON.parse(localStorage.getItem("user"));
+
+  const [reportOpen, setReportOpen] = useState(null);
+  const [reason, setReason] = useState("wrong_answer");
+  const [note, setNote] = useState("");
+  const [sent, setSent] = useState({});
+  const [reportError, setReportError] = useState("");
+  const [sending, setSending] = useState(false);
 
   if (!state) {
     return (
@@ -45,16 +61,16 @@ function Result() {
   const penalty = Math.round(wrong * negativeMarking * 100) / 100;
 
   let title = "Don't give up!";
-  let note = "Galtiyon se seekho aur dobara try karo.";
+  let note2 = "Galtiyon se seekho aur dobara try karo.";
   if (pct >= 80) {
     title = "Excellent!";
-    note = "Bahut badhiya performance, aise hi practice jaari rakho.";
+    note2 = "Bahut badhiya performance, aise hi practice jaari rakho.";
   } else if (pct >= 60) {
     title = "Good job!";
-    note = "Solid effort. Galat questions dekho aur dobara try karo.";
+    note2 = "Solid effort. Galat questions dekho aur dobara try karo.";
   } else if (pct >= 40) {
     title = "Keep practicing!";
-    note = "Thodi aur practice se score tezi se badhega.";
+    note2 = "Thodi aur practice se score tezi se badhega.";
   }
 
   const seg = (n) => (total ? (n / total) * CIRC : 0);
@@ -80,13 +96,33 @@ function Result() {
 
   const retryLink = `/exams/${id}/test?test=${testNumber}`;
 
+  const openReport = (qid) => {
+    setReportOpen(qid);
+    setReason("wrong_answer");
+    setNote("");
+    setReportError("");
+  };
+
+  const sendReport = async (qid) => {
+    setSending(true);
+    setReportError("");
+    try {
+      await API.post("/reports", { questionId: qid, reason, note });
+      setSent({ ...sent, [qid]: true });
+      setReportOpen(null);
+    } catch (err) {
+      setReportError(err.response?.data?.message || err.message);
+    }
+    setSending(false);
+  };
+
   return (
     <div className="rs-wrap">
       <div className="rs-hero">
         <div className="rs-hero-text">
           <span className="rs-tag">TEST {testNumber} COMPLETE</span>
           <h1>{title}</h1>
-          <p>{note}</p>
+          <p>{note2}</p>
           <div className="rs-stats">
             <div className="rs-stat">
               <small>SCORE</small>
@@ -219,8 +255,10 @@ function Result() {
         {review.map((r, i) => {
           const isSkipped = r.picked === null;
           const isCorrect = r.picked === r.correctIndex;
+          const qid = r.questionId;
+
           return (
-            <div key={i} className="rs-review">
+            <div key={qid || i} className="rs-review">
               <p className="rs-q">
                 <b>{i + 1}.</b> {r.question}
               </p>
@@ -229,6 +267,58 @@ function Result() {
               </p>
               {!isCorrect && (
                 <p className="rs-ans ok">Sahi jawab: {r.options[r.correctIndex]}</p>
+              )}
+
+              {r.explanation && <div className="rs-expl">Samjho: {r.explanation}</div>}
+
+              {qid && user && user.role !== "admin" && (
+                <>
+                  {sent[qid] ? (
+                    <p className="rs-report-ok">✔ Report bhej di gayi. Shukriya!</p>
+                  ) : reportOpen === qid ? (
+                    <div className="rs-report-form">
+                      <select value={reason} onChange={(e) => setReason(e.target.value)}>
+                        {REASONS.map((o) => (
+                          <option key={o.value} value={o.value}>{o.label}</option>
+                        ))}
+                      </select>
+                      <input
+                        placeholder="Chhota note (zaroori nahi)"
+                        maxLength={300}
+                        value={note}
+                        onChange={(e) => setNote(e.target.value)}
+                      />
+                      {reportError && (
+                        <span style={{ color: "#b91c1c", fontSize: "13px" }}>{reportError}</span>
+                      )}
+                      <div className="rs-report-actions">
+                        <button
+                          type="button"
+                          className="rs-report-send"
+                          disabled={sending}
+                          onClick={() => sendReport(qid)}
+                        >
+                          {sending ? "Bhej rahe hain..." : "Report bhejo"}
+                        </button>
+                        <button
+                          type="button"
+                          className="rs-report-cancel"
+                          onClick={() => setReportOpen(null)}
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <button
+                      type="button"
+                      className="rs-report-btn"
+                      onClick={() => openReport(qid)}
+                    >
+                      🚩 Is question mein galti hai?
+                    </button>
+                  )}
+                </>
               )}
             </div>
           );

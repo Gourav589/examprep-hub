@@ -27,6 +27,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import VerifyEmail from "./pages/VerifyEmail";
 import Reviews from "./pages/Reviews";
+import AdminReports from "./pages/AdminReports";
 function App() {
   return (
     <Layout>
@@ -59,6 +60,7 @@ function App() {
        <Route path="/reset-password/:token" element={<ResetPassword />} />
        <Route path="/verify-email" element={<VerifyEmail />} />
        <Route path="/reviews" element={<Reviews />} />
+       <Route path="/admin/reports" element={<AdminRoute><AdminReports /></AdminRoute>} />
       </Routes>
       </Layout>
   );

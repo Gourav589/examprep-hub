@@ -35,6 +35,7 @@ app.use("/api/attempts", require("./routes/attemptRoutes"));
 app.use("/api/admin", require("./routes/adminRoutes"));
 app.use("/api/jobs", require("./routes/jobRoutes"));
 app.use("/api/reviews", require("./routes/reviewRoutes"));
+app.use("/api/reports", require("./routes/reportRoutes"));
 app.use("/api/payments", require("./routes/paymentRoutes"));
 app.use("/api/analytics", require("./routes/analyticsRoutes"));
 app.use("/api/auth/forgot-password", resetLimiter);

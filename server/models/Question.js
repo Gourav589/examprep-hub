@@ -1,4 +1,4 @@
-    const mongoose = require("mongoose");
+const mongoose = require("mongoose");
 
 const questionSchema = new mongoose.Schema(
   {
@@ -8,6 +8,7 @@ const questionSchema = new mongoose.Schema(
     question: { type: String, required: true },
     options: { type: [String], required: true },
     correctIndex: { type: Number, required: true },
+    explanation: { type: String, default: "", maxlength: 1000 },
   },
   { timestamps: true }
 );

@@ -254,3 +254,78 @@
     justify-content: center;
   }
 }
+
+
+.rs-expl {
+  background: #eff6ff;
+  border-left: 4px solid #2563eb;
+  padding: 10px 14px;
+  border-radius: 8px;
+  margin-top: 8px;
+  font-size: 14px;
+  color: #1e3a8a;
+  line-height: 1.55;
+}
+
+.rs-report-btn {
+  background: none;
+  border: none;
+  color: #64748b;
+  font-size: 13px;
+  cursor: pointer;
+  margin-top: 8px;
+  padding: 0;
+  text-decoration: underline;
+}
+
+.rs-report-btn:hover {
+  color: #b91c1c;
+}
+
+.rs-report-form {
+  margin-top: 8px;
+  padding: 12px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  display: grid;
+  gap: 8px;
+  max-width: 460px;
+}
+
+.rs-report-form select,
+.rs-report-form input {
+  padding: 9px 10px;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 15px;
+}
+
+.rs-report-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.rs-report-actions button {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.rs-report-send {
+  background: #dc2626;
+  color: white;
+}
+
+.rs-report-cancel {
+  background: #e2e8f0;
+  color: #334155;
+}
+
+.rs-report-ok {
+  color: #047857;
+  font-size: 13px;
+  margin-top: 8px;
+}

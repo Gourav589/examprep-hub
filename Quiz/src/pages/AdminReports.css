@@ -1,0 +1,84 @@
+.ar-msg {
+  margin: 14px 0;
+  color: #4f46e5;
+}
+
+.ar-card {
+  margin-top: 16px;
+}
+
+.ar-meta {
+  color: #64748b;
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+
+.ar-reason {
+  color: #b91c1c;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.ar-reason span {
+  font-weight: 400;
+}
+
+.ar-expl {
+  margin-top: 8px;
+  color: #2563eb;
+  font-size: 14px;
+}
+
+.ar-form {
+  display: grid;
+  gap: 6px;
+  margin-top: 14px;
+  max-width: 560px;
+}
+
+.ar-form label {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.ar-form input,
+.ar-form select,
+.ar-form textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 15px;
+  font-family: inherit;
+}
+
+.ar-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+
+.ar-actions button {
+  padding: 9px 16px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.ar-edit,
+.ar-save {
+  background: #2563eb;
+  color: white;
+}
+
+.ar-ok {
+  background: #e2e8f0;
+  color: #334155;
+}
+
+.ar-cancel {
+  background: #fee2e2;
+  color: #b91c1c;
+}
