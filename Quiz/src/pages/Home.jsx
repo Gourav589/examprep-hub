@@ -4,7 +4,7 @@ import ExamCard from "../components/ExamCard";
 import API from "../services/api";
 import useSeo from "../hooks/useSeo";
 import "./Home.css";
-
+import DailyQuizCard from "../components/DailyQuizCard";
 const RADIUS = 38;
 const CIRC = 2 * Math.PI * RADIUS;
 
@@ -141,7 +141,7 @@ function Home() {
           <p>Test 1 har exam ka</p>
         </div>
       </div>
-
+<DailyQuizCard />
       {isStudent && (
         <section className="section">
           <div className="progress-card">

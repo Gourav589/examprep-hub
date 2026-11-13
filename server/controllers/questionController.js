@@ -4,7 +4,7 @@ const Attempt = require("../models/Attempt");
 const Exam = require("../models/Exam");
 const User = require("../models/User");
 const QuestionReport = require("../models/QuestionReport");
-
+const Mistake = require("../models/Mistake");
 const isPremiumActive = (user) =>
   user.isPremium && (!user.premiumUntil || user.premiumUntil > new Date());
 
@@ -96,7 +96,7 @@ exports.submitTest = async (req, res) => {
     let wrong = 0;
     let skipped = 0;
     const sections = {};
-
+        const wrongIds = [];
     const review = questions.map((q) => {
       const picked = answers[q._id];
       if (!sections[q.section]) {
@@ -110,7 +110,8 @@ exports.submitTest = async (req, res) => {
         correct += 1;
         sections[q.section].correct += 1;
       } else {
-        wrong += 1;
+           wrong += 1;
+        wrongIds.push(q._id);
       }
 
       return {
@@ -136,7 +137,30 @@ exports.submitTest = async (req, res) => {
       score: marks,
       sections,
     });
-
+       // Galat questions Mistakes Notebook mein jaate hain (fail ho to bhi test submit ho jaye)
+    try {
+      if (wrongIds.length > 0) {
+        await Mistake.bulkWrite(
+          wrongIds.map((qid) => ({
+            updateOne: {
+              filter: { user: req.userId, question: qid },
+              update: {
+                $set: {
+                  exam: examId,
+                  status: "active",
+                  lastWrongAt: new Date(),
+                  masteredAt: null,
+                },
+                $inc: { timesWrong: 1 },
+              },
+              upsert: true,
+            },
+          }))
+        );
+      }
+    } catch (e) {
+      console.log("Mistakes save nahi hui:", e.message);
+    }
     res.json({
       total: questions.length,
       correct,
@@ -146,6 +170,7 @@ exports.submitTest = async (req, res) => {
       marks,
       negativeMarking,
       testNumber,
+      mistakesAdded: wrongIds.length,
       sections,
       review,
     });

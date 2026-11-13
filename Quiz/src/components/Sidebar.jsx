@@ -9,6 +9,7 @@ function Sidebar({ open, onClose }) {
     { to: "/", label: "Home", icon: "🏠", end: true },
     { to: "/exams", label: "All Tests", icon: "📝" },
     { to: "/jobs", label: "Job Alerts", icon: "📢" },
+    { to: "/daily", label: "Daily Quiz", icon: "🔥" },
     { to: "/reviews", label: "Reviews", icon: "⭐" },
   ];
 
@@ -22,6 +23,7 @@ function Sidebar({ open, onClose }) {
     ];
   } else if (user) {
     links.splice(2, 0, { to: "/my-results", label: "My Attempts", icon: "📊" });
+    links.push({ to: "/mistakes", label: "Mistakes", icon: "📒" });
   links.splice(3, 0, { to: "/analytics", label: "Analytics", icon: "📈" });
   }
 if (user) {

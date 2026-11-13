@@ -233,7 +233,15 @@ function Result() {
               </div>
             </div>
           )}
-
+          {wrong > 0 && user && user.role !== "admin" && (
+            <Link to="/mistakes" className="rs-reco">
+              <span className="rs-reco-icon">📒</span>
+              <div>
+                <strong>Galat questions revise karo</strong>
+                <small>{wrong} question Mistakes Notebook mein jama hue</small>
+              </div>
+            </Link>
+          )}
           {user && user.role !== "admin" && (
             <Link to="/my-results" className="rs-reco">
               <span className="rs-reco-icon">📊</span>

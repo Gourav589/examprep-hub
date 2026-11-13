@@ -1,0 +1,270 @@
+.mn-sub {
+  color: #64748b;
+  margin: 6px 0 20px;
+  max-width: 640px;
+  line-height: 1.55;
+}
+
+.mn-empty {
+  background: white;
+  border-radius: 16px;
+  padding: 28px;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.08);
+  max-width: 560px;
+}
+
+.mn-empty p {
+  color: #64748b;
+  margin-top: 6px;
+  line-height: 1.55;
+}
+
+.mn-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.mn-chip {
+  padding: 9px 16px;
+  background: white;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 24px;
+  font-weight: 600;
+  cursor: pointer;
+  color: #0f2147;
+}
+
+.mn-chip b {
+  background: #fee2e2;
+  color: #b91c1c;
+  border-radius: 20px;
+  padding: 1px 8px;
+  margin-left: 4px;
+  font-size: 13px;
+}
+
+.mn-chip.active {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: white;
+}
+
+.mn-lock {
+  font-size: 12px;
+  opacity: 0.85;
+}
+
+.mn-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.mn-revise {
+  display: inline-block;
+  padding: 12px 22px;
+  background: linear-gradient(90deg, #2563eb, #7c5cf0);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.mn-revise:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.mn-count {
+  color: #64748b;
+  font-size: 14px;
+}
+
+.mn-locked {
+  background: #ede9fe;
+  color: #5b21b6;
+  padding: 12px 16px;
+  border-radius: 12px;
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+
+.mn-locked a {
+  color: #5b21b6;
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+.mn-list {
+  display: grid;
+  gap: 14px;
+}
+
+.mn-item {
+  background: white;
+  border-radius: 14px;
+  padding: 18px;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.08);
+  border-left: 5px solid #cbd5e1;
+}
+
+.mn-item.good {
+  border-left-color: #10b981;
+}
+
+.mn-item.bad {
+  border-left-color: #ef4444;
+}
+
+.mn-item-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.mn-tag {
+  background: #e0e7ff;
+  color: #3730a3;
+  padding: 3px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.mn-times {
+  color: #b91c1c;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.mn-options {
+  margin-top: 10px;
+}
+
+.mn-options p {
+  color: #475569;
+  padding: 3px 0;
+}
+
+.mn-options p.ok {
+  color: #047857;
+  font-weight: 600;
+}
+
+.mn-expl {
+  background: #eff6ff;
+  border-left: 4px solid #2563eb;
+  padding: 10px 14px;
+  border-radius: 8px;
+  margin-top: 10px;
+  font-size: 14px;
+  color: #1e3a8a;
+  line-height: 1.55;
+}
+
+.mn-remove {
+  margin-top: 12px;
+  background: none;
+  border: none;
+  color: #64748b;
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 13px;
+  padding: 0;
+}
+
+.mn-remove:hover {
+  color: #b91c1c;
+}
+
+.mn-pick {
+  display: grid;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.mn-opt {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+  padding: 11px 14px;
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 15px;
+  cursor: pointer;
+  color: #1e293b;
+}
+
+.mn-opt:hover {
+  border-color: #2563eb;
+}
+
+.mn-opt.selected {
+  background: #4f46e5;
+  border-color: #4f46e5;
+  color: white;
+}
+
+.mn-letter {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 8px;
+  font-weight: 700;
+  color: #475569;
+  flex-shrink: 0;
+}
+
+.mn-opt.selected .mn-letter {
+  color: #4f46e5;
+  border-color: white;
+}
+
+.mn-result {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 14px;
+  margin: 16px 0 22px;
+}
+
+.mn-result div {
+  background: white;
+  border-radius: 14px;
+  padding: 18px;
+  text-align: center;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.08);
+}
+
+.mn-result strong {
+  display: block;
+  font-size: 32px;
+  color: #2563eb;
+}
+
+.mn-result span {
+  color: #64748b;
+  font-size: 14px;
+}
+
+.mn-ans-ok {
+  color: #047857;
+  margin-top: 6px;
+}
+
+.mn-ans-bad {
+  color: #b91c1c;
+  margin-top: 6px;
+}

@@ -286,3 +286,49 @@
   color: #6ee7b7;
   border-color: #166534;
 }
+
+:where([data-theme="dark"]) :is(.dq-item, .dq-score) {
+  background: var(--d-surface);
+  border-color: var(--d-border);
+  color: var(--d-text);
+}
+
+:where([data-theme="dark"]) .dq-opt {
+  background: var(--d-surface2);
+  border-color: var(--d-border);
+  color: var(--d-text);
+}
+
+:where([data-theme="dark"]) .dq-letter {
+  background: var(--d-surface);
+  border-color: var(--d-border);
+  color: var(--d-text);
+}
+
+:where([data-theme="dark"]) .dq-sub,
+:where([data-theme="dark"]) .dq-score span {
+  color: var(--d-muted);
+}
+
+:where([data-theme="dark"]) .dq-expl {
+  background: #16264d;
+  color: #c7d7ff;
+}
+
+:where([data-theme="dark"]) :is(.dq-streak, .dqc) {
+  background: linear-gradient(135deg, #2a1a0c, #2b1218);
+  border-color: #5b3a1a;
+}
+
+:where([data-theme="dark"]) :is(.dq-streak strong, .dqc-text h3) {
+  color: #fdba74;
+}
+
+:where([data-theme="dark"]) :is(.dq-streak small, .dqc-text p, .dq-badge i) {
+  color: #fcd9b0;
+}
+
+:where([data-theme="dark"]) .dq-empty {
+  background: #0c2a3d;
+  color: #a5d8f5;
+}

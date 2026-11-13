@@ -28,6 +28,9 @@ import ResetPassword from "./pages/ResetPassword";
 import VerifyEmail from "./pages/VerifyEmail";
 import Reviews from "./pages/Reviews";
 import AdminReports from "./pages/AdminReports";
+import Mistakes from "./pages/Mistakes";
+import MistakePractice from "./pages/MistakePractice";
+import DailyQuiz from "./pages/DailyQuiz";
 function App() {
   return (
     <Layout>
@@ -54,6 +57,9 @@ function App() {
         <Route path="/privacy" element={<Legal kind="privacy" />} />
         <Route path="/refund-policy" element={<Legal kind="refund" />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/mistakes" element={<Mistakes />} />
+        <Route path="/mistakes/practice" element={<MistakePractice />} />
+        <Route path="/daily" element={<DailyQuiz />} />
         <Route path="*" element={<NotFound />} />
         <Route path="/admin/questions/bulk" element={<AdminRoute><AdminBulkUpload /></AdminRoute>} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
