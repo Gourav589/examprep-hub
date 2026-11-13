@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate, useSearchParams, Link } from "react-router-dom";
 import API from "../services/api";
 import "./TestPage.css";
@@ -7,11 +7,39 @@ const LETTERS = ["A", "B", "C", "D"];
 const RADIUS = 34;
 const CIRC = 2 * Math.PI * RADIUS;
 
+const readDraft = (key) => {
+  try {
+    const raw = localStorage.getItem(key);
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+};
+
+const writeDraft = (key, data) => {
+  try {
+    localStorage.setItem(key, JSON.stringify(data));
+  } catch {
+    // storage bhar gaya ho to bhi test chalta rahe
+  }
+};
+
+const clearDraft = (key) => {
+  try {
+    localStorage.removeItem(key);
+  } catch {
+    // koi baat nahi
+  }
+};
+
 function TestPage() {
   const { id } = useParams();
   const [params] = useSearchParams();
   const testNumber = Number(params.get("test")) || 1;
   const navigate = useNavigate();
+
+  const user = JSON.parse(localStorage.getItem("user"));
+  const key = `testDraft:${user ? user.id : "guest"}:${id}:${testNumber}`;
 
   const [exam, setExam] = useState(null);
   const [questions, setQuestions] = useState([]);
@@ -20,11 +48,16 @@ function TestPage() {
   const [marked, setMarked] = useState({});
   const [visited, setVisited] = useState({});
   const [totalSeconds, setTotalSeconds] = useState(600);
+  const [endAt, setEndAt] = useState(null);
   const [timeLeft, setTimeLeft] = useState(600);
+  const [resumed, setResumed] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [submitError, setSubmitError] = useState("");
   const [submitting, setSubmitting] = useState(false);
+
+  // Submit ke baad draft dobara save na ho, isliye
+  const doneRef = useRef(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -39,11 +72,42 @@ function TestPage() {
 
         const ex = examRes ? examRes.data : null;
         const secs = (ex && ex.durationMinutes ? ex.durationMinutes : 10) * 60;
+        const qs = qRes.data;
+
+        let end = Date.now() + secs * 1000;
+        let a = {};
+        let m = {};
+        let v = {};
+        let cur = 0;
+        let didResume = false;
+
+        const draft = readDraft(key);
+        if (draft && typeof draft.endAt === "number" && qs.length > 0) {
+          const ids = new Set(qs.map((q) => q._id));
+          const keep = (obj) =>
+            Object.fromEntries(
+              Object.entries(obj || {}).filter(([k]) => ids.has(k))
+            );
+
+          a = keep(draft.answers);
+          m = keep(draft.marked);
+          v = keep(draft.visited);
+          cur = Math.min(Math.max(Number(draft.current) || 0, 0), qs.length - 1);
+          // Time kabhi poore test ke time se zyada nahi ho sakta
+          end = Math.min(draft.endAt, Date.now() + secs * 1000);
+          didResume = true;
+        }
 
         setExam(ex);
         setTotalSeconds(secs);
-        setTimeLeft(secs);
-        setQuestions(qRes.data);
+        setQuestions(qs);
+        setAnswers(a);
+        setMarked(m);
+        setVisited(v);
+        setCurrent(cur);
+        setEndAt(end);
+        setTimeLeft(Math.max(0, Math.ceil((end - Date.now()) / 1000)));
+        setResumed(didResume);
       } catch (err) {
         if (!cancelled) setError(err.response?.data?.message || err.message);
       } finally {
@@ -57,22 +121,38 @@ function TestPage() {
     };
   }, [id, testNumber]);
 
-  const started = questions.length > 0;
+  const started = questions.length > 0 && endAt !== null;
 
-  // Timer sirf tab chalu hota hai jab questions aa jayein
+  // Timer: ghadi ke samay se (tab band rahe tab bhi sahi chalta hai)
   useEffect(() => {
     if (!started) return;
-    const timer = setInterval(() => setTimeLeft((s) => s - 1), 1000);
+    const tick = () =>
+      setTimeLeft(Math.max(0, Math.ceil((endAt - Date.now()) / 1000)));
+    tick();
+    const timer = setInterval(tick, 1000);
     return () => clearInterval(timer);
-  }, [started]);
+  }, [started, endAt]);
 
   // Jo question abhi khula hai use "visited" maano
   useEffect(() => {
     if (questions[current]) {
       const qid = questions[current]._id;
-      setVisited((v) => ({ ...v, [qid]: true }));
+      setVisited((v) => (v[qid] ? v : { ...v, [qid]: true }));
     }
   }, [current, questions]);
+
+  // Auto-save: har badlav par
+  useEffect(() => {
+    if (!started || doneRef.current) return;
+    writeDraft(key, {
+      endAt,
+      answers,
+      marked,
+      visited,
+      current,
+      savedAt: Date.now(),
+    });
+  }, [started, endAt, answers, marked, visited, current, key]);
 
   const submitTest = async () => {
     if (submitting) return;
@@ -83,6 +163,8 @@ function TestPage() {
         testNumber,
         answers,
       });
+      doneRef.current = true;
+      clearDraft(key);
       navigate(`/exams/${id}/result`, { state: data });
     } catch (err) {
       setSubmitError(err.response?.data?.message || err.message);
@@ -93,7 +175,14 @@ function TestPage() {
   // Time khatam hone par apne aap submit
   useEffect(() => {
     if (started && timeLeft <= 0) submitTest();
-  }, [timeLeft]);
+  }, [timeLeft, started]);
+
+  const restartFresh = () => {
+    if (!window.confirm("Purana progress hata kar naye sire se shuru karein?")) return;
+    doneRef.current = true;
+    clearDraft(key);
+    window.location.reload();
+  };
 
   if (loading) return <div className="tp-wrap"><p>Loading...</p></div>;
 
@@ -161,6 +250,13 @@ function TestPage() {
 
   return (
     <div className="tp-wrap">
+      {resumed && (
+        <div className="tp-notice">
+          <span>✔ Aapka pichla progress wapas mil gaya. Time wahin se chal raha hai.</span>
+          <button type="button" onClick={restartFresh}>Naye sire se shuru karo</button>
+        </div>
+      )}
+
       <div className="tp-header">
         <div className="tp-title">
           <p className="tp-exam">
@@ -169,6 +265,7 @@ function TestPage() {
           <p className="tp-sub">
             Answered {answeredCount} / {questions.length}
             {neg > 0 && ` | Galat jawab par -${neg}`}
+            {" | Auto-save chalu"}
           </p>
           <div className="tp-progress">
             <div className="tp-progress-fill" style={{ width: `${progressPct}%` }} />

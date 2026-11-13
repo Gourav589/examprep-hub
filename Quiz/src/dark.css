@@ -275,3 +275,14 @@
   color: var(--d-text);
   border-color: var(--d-border);
 }
+
+:where([data-theme="dark"]) .tp-notice {
+  background: #0f2e25;
+  color: #6ee7b7;
+}
+
+:where([data-theme="dark"]) .tp-notice button {
+  background: var(--d-surface);
+  color: #6ee7b7;
+  border-color: #166534;
+}

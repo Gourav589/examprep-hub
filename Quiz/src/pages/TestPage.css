@@ -352,3 +352,28 @@
     margin-left: 0;
   }
 }
+
+.tp-notice {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  background: #d1fae5;
+  color: #047857;
+  padding: 12px 16px;
+  border-radius: 12px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.tp-notice button {
+  background: white;
+  color: #047857;
+  border: 1.5px solid #6ee7b7;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
