@@ -39,7 +39,7 @@ exports.createExam = async (req, res) => {
       category,
       tests: Number(tests) || 0,
       freeTests: Math.min(100, Math.max(0, Number(freeTests ?? 1) || 0)),
-      durationMinutes: Math.min(300, Math.max(1, Number(durationMinutes) || 10)),
+      durationMinutes: Math.min(300, Math.max(1, Number(durationMinutes) || 60)),
       negativeMarking: Math.min(1, Math.max(0, Number(negativeMarking) || 0)),
     });
     res.status(201).json(exam);
@@ -68,7 +68,7 @@ exports.updateExam = async (req, res) => {
       exam.freeTests = Math.min(100, Math.max(0, Number(freeTests) || 0));
     }
     if (durationMinutes !== undefined) {
-      exam.durationMinutes = Math.min(300, Math.max(1, Number(durationMinutes) || 10));
+      exam.durationMinutes = Math.min(300, Math.max(1, Number(durationMinutes) || 60));
     }
     if (negativeMarking !== undefined) {
       exam.negativeMarking = Math.min(1, Math.max(0, Number(negativeMarking) || 0));

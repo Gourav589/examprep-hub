@@ -36,7 +36,7 @@ function ExamDetail() {
   if (loading) return <div className="section"><p>Loading...</p></div>;
   if (error) return <div className="section"><p>{error}</p></div>;
 
-  const minutes = exam.durationMinutes || 10;
+  const minutes = exam.durationMinutes || 60;
   const neg = exam.negativeMarking || 0;
   const freeTests = typeof exam.freeTests === "number" ? exam.freeTests : 1;
 

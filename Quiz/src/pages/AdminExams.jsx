@@ -7,7 +7,7 @@ const emptyForm = {
   category: "",
   tests: 0,
   freeTests: 1,
-  durationMinutes: 10,
+  durationMinutes: 60,
   negativeMarking: 0,
 };
 
@@ -57,7 +57,7 @@ function AdminExams() {
       category: exam.category,
       tests: exam.tests,
       freeTests: typeof exam.freeTests === "number" ? exam.freeTests : 1,
-      durationMinutes: exam.durationMinutes || 10,
+      durationMinutes: exam.durationMinutes || 60,
       negativeMarking: exam.negativeMarking || 0,
     });
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -175,7 +175,7 @@ function AdminExams() {
             <p>
               {exam.category} | {exam.tests} tests |{" "}
               {typeof exam.freeTests === "number" ? exam.freeTests : 1} free |{" "}
-              {exam.durationMinutes || 10} min |{" "}
+              {exam.durationMinutes || 60} min |{" "}
               {exam.negativeMarking ? `-${exam.negativeMarking} negative` : "no negative"}
             </p>
           </div>

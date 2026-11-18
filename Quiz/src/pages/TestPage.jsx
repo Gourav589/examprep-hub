@@ -71,7 +71,7 @@ function TestPage() {
         if (cancelled) return;
 
         const ex = examRes ? examRes.data : null;
-        const secs = (ex && ex.durationMinutes ? ex.durationMinutes : 10) * 60;
+        const secs = (ex && ex.durationMinutes ? ex.durationMinutes : 60) * 60;
         const qs = qRes.data;
 
         let end = Date.now() + secs * 1000;

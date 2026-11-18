@@ -332,3 +332,110 @@
   background: #0c2a3d;
   color: #a5d8f5;
 }
+
+:where([data-theme="dark"]) :is(
+    .cat-tile,
+    .why-card,
+    .hj-card,
+    .rvh-card,
+    .price-card,
+    .faq-item
+  ) {
+  background: var(--d-surface);
+  border-color: var(--d-border);
+  color: var(--d-text);
+}
+
+:where([data-theme="dark"]) .cat-tile {
+  border-top-color: var(--accent);
+}
+
+:where([data-theme="dark"]) .price-card {
+  border-top-color: #4b5d8a;
+}
+
+:where([data-theme="dark"]) .price-card.premium {
+  border-top-color: #7c3aed;
+}
+
+:where([data-theme="dark"]) .cat-icon {
+  background: var(--d-surface2);
+}
+
+:where([data-theme="dark"]) .why-icon {
+  background: var(--d-surface2);
+}
+
+:where([data-theme="dark"]) :is(.cat-tile strong, .rvh-by, .rvh-top strong, .price-amt, .faq-item summary) {
+  color: var(--d-head);
+}
+
+:where([data-theme="dark"]) :is(
+    .cat-tile small,
+    .why-card p,
+    .hj-card p,
+    .rvh-card p,
+    .rvh-top small,
+    .price-card li,
+    .price-amt small,
+    .faq-item p,
+    .faq-links,
+    .sec-head p
+  ) {
+  color: var(--d-muted);
+}
+
+:where([data-theme="dark"]) .price-tag {
+  background: var(--d-surface2);
+  color: var(--d-text);
+}
+
+:where([data-theme="dark"]) .price-btn.ghost {
+  background: transparent;
+  color: var(--d-link);
+  border-color: var(--d-link);
+}
+
+/* Hero ka preview card hamesha safed rahta hai, dark mode mein bhi */
+
+
+:where([data-theme="dark"]) :is(.hx-step, .hx-card) {
+  background: var(--d-surface);
+}
+
+:where([data-theme="dark"]) :is(.hx-step p, .hx-card p) {
+  color: var(--d-muted);
+}
+
+:where([data-theme="dark"]) .hx-icon {
+  background: var(--d-surface2);
+}
+
+:where([data-theme="dark"]) .hx-tip {
+  background: linear-gradient(135deg, #2b230d, #2e1f0a);
+  border-color: #5c4a14;
+}
+
+:where([data-theme="dark"]) :is(.hx-tip-body h3, .hx-tip-tag) {
+  color: #fcd34d;
+}
+
+:where([data-theme="dark"]) .hx-tip-tag {
+  background: #4a3a0a;
+}
+
+:where([data-theme="dark"]) .hx-tip-body p {
+  color: #fde7a6;
+}
+
+:where([data-theme="dark"]) :is(.sm-card, .sn-box) {
+  background: var(--d-surface);
+}
+
+:where([data-theme="dark"]) :is(.sm-card p, .sm-sub, .sm-type, .sn-text) {
+  color: var(--d-muted);
+}
+
+:where([data-theme="dark"]) .sn-cta {
+  border-color: var(--d-border);
+}

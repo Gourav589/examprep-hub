@@ -50,6 +50,12 @@ function AdminDashboard() {
             <p>Govt job notifications add karna aur delete karna</p>
           </div>
         </Link>
+                <Link to="/admin/resources" style={{ color: "inherit" }}>
+          <div className="exam-card">
+            <h3>📚 Study Material</h3>
+            <p>Notes aur useful links jodna</p>
+          </div>
+        </Link>
       </div>
     </div>
   );

@@ -31,6 +31,10 @@ import AdminReports from "./pages/AdminReports";
 import Mistakes from "./pages/Mistakes";
 import MistakePractice from "./pages/MistakePractice";
 import DailyQuiz from "./pages/DailyQuiz";
+import StudyMaterial from "./pages/StudyMaterial";
+import StudyNote from "./pages/StudyNote";
+import AdminResources from "./pages/AdminResources";
+
 function App() {
   return (
     <Layout>
@@ -60,6 +64,9 @@ function App() {
         <Route path="/mistakes" element={<Mistakes />} />
         <Route path="/mistakes/practice" element={<MistakePractice />} />
         <Route path="/daily" element={<DailyQuiz />} />
+        <Route path="/study" element={<StudyMaterial />} />
+        <Route path="/study/:id" element={<StudyNote />} />
+        <Route path="/admin/resources" element={<AdminRoute><AdminResources /></AdminRoute>} />
         <Route path="*" element={<NotFound />} />
         <Route path="/admin/questions/bulk" element={<AdminRoute><AdminBulkUpload /></AdminRoute>} />
         <Route path="/forgot-password" element={<ForgotPassword />} />

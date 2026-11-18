@@ -38,6 +38,7 @@ app.use("/api/reviews", require("./routes/reviewRoutes"));
 app.use("/api/reports", require("./routes/reportRoutes"));
 app.use("/api/mistakes", require("./routes/mistakeRoutes"));
 app.use("/api/daily", require("./routes/dailyRoutes"));
+app.use("/api/resources", require("./routes/resourceRoutes"));
 app.use("/api/payments", require("./routes/paymentRoutes"));
 app.use("/api/analytics", require("./routes/analyticsRoutes"));
 app.use("/api/auth/forgot-password", resetLimiter);
