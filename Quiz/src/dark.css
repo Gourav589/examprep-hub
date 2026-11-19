@@ -439,3 +439,27 @@
 :where([data-theme="dark"]) .sn-cta {
   border-color: var(--d-border);
 }
+
+
+:where([data-theme="dark"]) .wp-modal {
+  background: var(--d-surface);
+}
+
+:where([data-theme="dark"]) .wp-modal h2 {
+  color: var(--d-head);
+}
+
+:where([data-theme="dark"]) :is(.wp-sub, .wp-list, .wp-later) {
+  color: var(--d-muted);
+}
+
+:where([data-theme="dark"]) .wp-x {
+  background: var(--d-surface2);
+  color: var(--d-text);
+}
+
+:where([data-theme="dark"]) .wp-secondary {
+  background: transparent;
+  color: var(--d-link);
+  border-color: var(--d-link);
+}

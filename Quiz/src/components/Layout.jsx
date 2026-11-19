@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
 import Footer from "./Footer";
+import WelcomePopup from "./WelcomePopup";
 import "./Layout.css";
 
 function Layout({ children }) {
@@ -25,6 +26,8 @@ function Layout({ children }) {
 
       {children}
       <Footer />
+
+      <WelcomePopup />
     </>
   );
 }
