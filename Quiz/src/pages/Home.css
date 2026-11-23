@@ -930,3 +930,31 @@
     font-size: 25px;
   }
 }
+
+
+.price-offer {
+  display: inline-block;
+  margin-left: 8px;
+  background: linear-gradient(90deg, #be123c, #ea580c);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.price-old {
+  font-size: 22px;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+.price-cd {
+  margin: -4px 0 12px;
+  color: #9a3412;
+  font-size: 14px;
+}
+
+.price-cd .cd b {
+  color: #be123c;
+}

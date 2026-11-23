@@ -3,8 +3,8 @@ const Razorpay = require("razorpay");
 const User = require("../models/User");
 const Payment = require("../models/Payment");
 const { sendEmail, membershipEmail } = require("../utils/sendEmail");
+const { getPricing } = require("../config/pricing");
 
-const PRICE_INR = 200;
 const PLAN_DAYS = 30;
 
 const getClient = () =>
@@ -27,11 +27,13 @@ exports.createOrder = async (req, res) => {
       return res.status(400).json({ message: "Admin ko membership ki zaroorat nahi" });
     }
 
+    const pricing = getPricing();
+
     const order = await getClient().orders.create({
-      amount: PRICE_INR * 100,
+      amount: pricing.price * 100, // paise mein, hamesha server tay karta hai
       currency: "INR",
       receipt: `rcpt_${Date.now()}`,
-      notes: { userId: String(user._id), plan: "monthly" },
+      notes: { userId: String(user._id), plan: "monthly", offer: String(pricing.offerActive) },
     });
 
     await Payment.create({
@@ -106,7 +108,7 @@ exports.verifyPayment = async (req, res) => {
     await user.save();
 
     // Email alag se bhejte hain: fail bhi ho jaye to payment par asar nahi
-    const mail = membershipEmail(user, user.premiumUntil);
+    const mail = membershipEmail(user, user.premiumUntil, payment.amount / 100);
     sendEmail({ to: user.email, ...mail }).catch((e) =>
       console.log("Email nahi gaya:", e.message)
     );
@@ -125,7 +127,11 @@ exports.getStatus = async (req, res) => {
     }
     const active =
       user.isPremium && (!user.premiumUntil || user.premiumUntil > new Date());
-    res.json({ isPremium: active, premiumUntil: user.premiumUntil, price: PRICE_INR });
+    res.json({
+      isPremium: active,
+      premiumUntil: user.premiumUntil,
+      price: getPricing().price,
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

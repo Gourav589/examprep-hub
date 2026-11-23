@@ -40,6 +40,7 @@ app.use("/api/mistakes", require("./routes/mistakeRoutes"));
 app.use("/api/daily", require("./routes/dailyRoutes"));
 app.use("/api/resources", require("./routes/resourceRoutes"));
 app.use("/api/payments", require("./routes/paymentRoutes"));
+app.use("/api/pricing", require("./routes/pricingRoutes"));
 app.use("/api/analytics", require("./routes/analyticsRoutes"));
 app.use("/api/auth/forgot-password", resetLimiter);
 app.use("/api/auth/reset-password", resetLimiter);

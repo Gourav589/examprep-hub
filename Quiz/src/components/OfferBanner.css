@@ -1,0 +1,70 @@
+.ob {
+  position: relative;
+  background: linear-gradient(90deg, #be123c, #ea580c);
+  color: white;
+  font-size: 14px;
+}
+
+.ob-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 9px 44px 9px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  text-align: center;
+}
+
+.ob s {
+  opacity: 0.8;
+}
+
+.ob .cd {
+  background: rgba(255, 255, 255, 0.18);
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 13px;
+}
+
+.ob-btn {
+  background: white;
+  color: #be123c;
+  padding: 5px 16px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.ob-btn:hover {
+  background: #fff1f2;
+}
+
+.ob-x {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  cursor: pointer;
+}
+
+.ob-x:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+@media (max-width: 600px) {
+  .ob {
+    font-size: 13px;
+  }
+
+  .ob-inner {
+    padding: 8px 40px 8px 12px;
+  }
+}

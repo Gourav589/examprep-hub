@@ -8,7 +8,8 @@ import API from "../services/api";
 import useSeo from "../hooks/useSeo";
 import { SITE } from "../config/site";
 import "./Home.css";
-
+import usePricing from "../hooks/usePricing";
+import Countdown from "../components/Countdown";
 
 const RADIUS = 38;
 const CIRC = 2 * Math.PI * RADIUS;
@@ -80,7 +81,7 @@ const FAQ = [
   },
   {
     q: "Premium mein kya milta hai?",
-    a: `Premium (Rs ${SITE.price} for ${SITE.days} days) mein har exam ke saare tests khul jate hain, pehle free test ke baad wale bhi.`,
+        a: "Premium mein har exam ke saare tests khul jate hain, pehle free test ke baad wale bhi. Price aur chal rahe offer Membership page par dikhte hain.",
   },
   {
     q: "Kya premium apne aap renew hota hai?",
@@ -114,6 +115,7 @@ function Home() {
   );
 
   const navigate = useNavigate();
+  const { pricing, offset: pricingOffset, refresh } = usePricing();
   const [exams, setExams] = useState([]);
   const [attempts, setAttempts] = useState([]);
   const [jobs, setJobs] = useState([]);
@@ -208,7 +210,7 @@ function Home() {
     const p = a.total ? Math.round((a.correct / a.total) * 100) : 0;
     return p > best ? p : best;
   }, 0);
-  const offset = CIRC * (1 - accuracy / 100);
+const progressOffset = CIRC * (1 - accuracy / 100);
 
   return (
     <>
@@ -310,7 +312,7 @@ function Home() {
                       r={RADIUS}
                       className="pr-fg"
                       strokeDasharray={CIRC}
-                      strokeDashoffset={offset}
+                    strokeDashoffset={progressOffset}
                     />
                   </svg>
                   <div className="progress-ring-text">
@@ -567,9 +569,28 @@ function Home() {
 
           <div className="price-card premium">
             <span className="price-tag">Premium</span>
+                       {pricing && pricing.offerActive && (
+              <span className="price-offer">
+                🎉 {pricing.savePercent}% off | Limited offer
+              </span>
+            )}
             <div className="price-amt">
-              Rs {SITE.price} <small>/ {SITE.days} din</small>
+              {pricing && pricing.offerActive && (
+                <s className="price-old">Rs {pricing.listPrice}</s>
+              )}{" "}
+              Rs {pricing ? pricing.price : "--"}{" "}
+              <small>/ {pricing ? pricing.days : 30} din</small>
             </div>
+            {pricing && pricing.offerActive && (
+              <p className="price-cd">
+                <Countdown
+                  endsAt={pricing.endsAt}
+              offset={pricingOffset}
+                  label="Offer khatam hone mein"
+                  onDone={refresh}
+                />
+              </p>
+            )}
             <ul>
               <li>✔ Free ki saari cheezein</li>
               <li>✔ Har exam ke saare tests</li>

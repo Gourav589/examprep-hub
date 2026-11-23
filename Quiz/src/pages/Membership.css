@@ -87,3 +87,48 @@
   background: #fee2e2;
   color: #b91c1c;
 }
+
+.mb-card-offer {
+  position: relative;
+  border-top-color: #ea580c;
+  box-shadow: 0 14px 36px rgba(234, 88, 12, 0.22);
+}
+
+.mb-ribbon {
+  position: absolute;
+  top: -14px;
+  right: 18px;
+  background: linear-gradient(90deg, #be123c, #ea580c);
+  color: white;
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 700;
+  box-shadow: 0 6px 14px rgba(190, 18, 60, 0.3);
+}
+
+.mb-old {
+  font-size: 22px;
+  color: #94a3b8;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+.mb-offer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  background: #fff7ed;
+  border: 1px dashed #fb923c;
+  color: #9a3412;
+  padding: 10px 14px;
+  border-radius: 12px;
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+
+.mb-offer .cd b {
+  color: #be123c;
+}

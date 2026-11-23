@@ -33,8 +33,7 @@ function buildPages() {
         {
           h: "4. Premium membership",
           p: [
-            `Premium costs Rs ${SITE.price} for ${SITE.days} days and unlocks premium exams. It is a one-time payment for that period and does not renew automatically. If you pay again before it ends, more days are added.`,
-            "Payments are processed by Razorpay. Our refund rules are on the Refund Policy page.",
+                      `Premium unlocks every test after the free ones in each exam, for ${SITE.days} days. The price shown on the Membership page when you pay is the price you are charged, and offers may run only for a limited time. It is a one-time payment for that period and does not renew automatically. If you pay again before it ends, more days are added.`,
           ],
         },
         {

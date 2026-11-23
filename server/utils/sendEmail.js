@@ -40,7 +40,7 @@ exports.sendEmail = async ({ to, subject, html }) => {
   });
 };
 
-exports.membershipEmail = (user, until) => {
+exports.membershipEmail = (user, until, amountRs) => {
   const date = new Date(until).toLocaleDateString("en-IN", {
     day: "numeric",
     month: "long",
@@ -58,7 +58,7 @@ exports.membershipEmail = (user, until) => {
           <p>Hi ${escapeHtml(user.name)},</p>
           <p>Aapka payment mil gaya hai. Aapki <b>premium membership chalu ho gayi hai</b>.</p>
           <p style="background:#f1f5f9;padding:12px 16px;border-radius:8px">
-            Amount: <b>Rs 200</b><br/>
+            Amount: <b>Rs ${escapeHtml(amountRs)}</b><br/>
             Valid till: <b>${escapeHtml(date)}</b>
           </p>
           <p>Ab saare premium mock tests unlock hain. Practice shuru karo aur apna score badhao!</p>
@@ -67,7 +67,6 @@ exports.membershipEmail = (user, until) => {
       </div>`,
   };
 };
-
 exports.resetEmail = (user, link) => ({
   subject: "ExamPrep Hub: password reset karo",
   html: `

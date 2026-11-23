@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import OfferBanner from "./OfferBanner";
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
 import Footer from "./Footer";
@@ -16,6 +17,7 @@ function Layout({ children }) {
 
   return (
     <>
+      <OfferBanner />
       <Navbar onMenuClick={() => setOpen(true)} />
 
       <Sidebar open={open} onClose={() => setOpen(false)} />

@@ -2,8 +2,10 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import API from "../services/api";
 import useSeo from "../hooks/useSeo";
-import "./Membership.css";
+import usePricing from "../hooks/usePricing";
+import Countdown from "../components/Countdown";
 import { clearPremiumCache } from "../hooks/usePremium";
+import "./Membership.css";
 
 function loadCheckout() {
   return new Promise((resolve) => {
@@ -19,11 +21,12 @@ function loadCheckout() {
 function Membership() {
   useSeo(
     "Premium Membership | ExamPrep Hub",
-    "Unlock all premium mock tests with a monthly membership."
+    "Unlock every premium mock test with a monthly membership."
   );
 
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user"));
+  const { pricing, offset, refresh } = usePricing();
 
   const [status, setStatus] = useState(null);
   const [paying, setPaying] = useState(false);
@@ -46,6 +49,7 @@ function Membership() {
       navigate("/login");
       return;
     }
+    if (!pricing) return;
 
     setPaying(true);
 
@@ -59,12 +63,23 @@ function Membership() {
     try {
       const { data } = await API.post("/payments/create-order");
 
+      // Agar offer isi beech khatam ho gaya ho, to chupchap naye price par charge nahi karte
+      if (data.amount !== pricing.price * 100) {
+        await refresh();
+        setMsg({
+          type: "err",
+          text: `Offer abhi khatam ho gaya. Ab price ₹${data.amount / 100} hai. Dekhkar dobara try karo.`,
+        });
+        setPaying(false);
+        return;
+      }
+
       const options = {
         key: data.keyId,
         amount: data.amount,
         currency: data.currency,
         name: "ExamPrep Hub",
-        description: "Premium membership (30 din)",
+        description: `Premium membership (${pricing.days} din)`,
         order_id: data.orderId,
         prefill: { name: data.name, email: data.email },
         theme: { color: "#2563eb" },
@@ -110,28 +125,50 @@ function Membership() {
   };
 
   const isAdmin = user && user.role === "admin";
+  const offer = pricing && pricing.offerActive;
 
   return (
     <div className="section">
       <h1>Premium Membership</h1>
-      <p className="mb-sub">Saare premium mock tests unlock karo, ek mahine ke liye.</p>
+      <p className="mb-sub">Har exam ke saare tests unlock karo, {pricing ? pricing.days : 30} din ke liye.</p>
 
       {status && status.isPremium && (
         <div className="mb-active">
           Aapki membership chalu hai
           {status.premiumUntil &&
             ` (${new Date(status.premiumUntil).toLocaleDateString()} tak)`}
-          . Dobara pay karoge to 30 din aur jud jayenge.
+          . Dobara pay karoge to {pricing ? pricing.days : 30} din aur jud jayenge.
         </div>
       )}
 
       {msg.text && <div className={"mb-msg " + msg.type}>{msg.text}</div>}
 
-      <div className="mb-card">
+      <div className={"mb-card" + (offer ? " mb-card-offer" : "")}>
+        {offer && (
+          <div className="mb-ribbon">🎉 {pricing.savePercent}% OFF | Limited offer</div>
+        )}
+
         <span className="mb-tag">Monthly Plan</span>
+
         <div className="mb-price">
-          ₹200 <small>/ mahina</small>
+          {offer && <s className="mb-old">₹{pricing.listPrice}</s>}
+          ₹{pricing ? pricing.price : "--"}{" "}
+          <small>/ {pricing ? pricing.days : 30} din</small>
         </div>
+
+        {offer && (
+          <div className="mb-offer">
+            <span>
+              Aapki bachat: <b>₹{pricing.listPrice - pricing.offerPrice}</b>
+            </span>
+            <Countdown
+              endsAt={pricing.endsAt}
+              offset={offset}
+              label="Offer khatam hone mein"
+              onDone={refresh}
+            />
+          </div>
+        )}
 
         <ul className="mb-list">
           <li>✔ Har exam ke saare tests (Test 2 aur aage ke sab)</li>
@@ -143,11 +180,22 @@ function Membership() {
         {isAdmin ? (
           <p className="mb-note">Admin ko membership ki zaroorat nahi hai.</p>
         ) : (
-          <button className="mb-btn" onClick={handlePay} disabled={paying}>
-            {paying ? "Please wait..." : user ? "Pay ₹200 and Unlock" : "Login karke Unlock karo"}
+          <button className="mb-btn" onClick={handlePay} disabled={paying || !pricing}>
+            {paying
+              ? "Please wait..."
+              : !pricing
+              ? "Loading..."
+              : user
+              ? `Pay ₹${pricing.price} and Unlock`
+              : "Login karke Unlock karo"}
           </button>
         )}
 
+        {offer && (
+          <p className="mb-note">
+            Offer khatam hone ke baad price ₹{pricing.listPrice} ho jayega.
+          </p>
+        )}
         <p className="mb-note">
           Payment Razorpay se hota hai. Aapke card ya UPI ki details is website par save nahi hoti.
         </p>
